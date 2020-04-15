@@ -14,7 +14,7 @@
 
 
 
-<title>踩坑笔记——Xamarin开发Mac客户端应用程序 | 面向兴趣编程</title>
+<title>踩坑笔记——Xamarin开发Mac客户端 | 面向兴趣编程</title>
 
 
 
@@ -214,7 +214,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">踩坑笔记——Xamarin开发Mac客户端应用程序</h1>
+            <h1 class="post-title">踩坑笔记——Xamarin开发Mac客户端</h1>
             
                 <div class="post-meta">
                     
@@ -232,12 +232,21 @@
         </header>
 
         <div class="post-content">
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>作者建议的技术方案是：Python 与 .Net Core 混合开发。</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>最近得到一个新的开发任务：将公司现有的项目移植到 Mac 平台上。</p>
+<p>先展示一下项目的结构图</p>
+<p>从上图可以看出，整个项目思路就是把客户端当成本地的服务端，不提供界面，只用于处理web端与硬件设备的数据中转。</p>
+<p>前端与客户端使用 <em>SignalR</em> 进行通讯，而客户端主要用于下发指令硬件。</p>
+<h2 id="预期"><a href="#预期" class="headerlink" title="预期"></a>预期</h2><p>作者建议的技术方案是：Python 与 .Net Core 混合开发。</p>
 <p>为什么会这么思考呢？是基于如下三个点考虑的：</p>
-<p>​    1.Mac 本身自带Python2.7，利用 Python 绘制 Gui , .Net core 作为它的核心服务。（.Net Core能打包成单文件）减少依赖环境。</p>
-<p>​    2.通讯协议不用更改，在 Windows上客户端使用 SignalR 与前端进行通讯， Core是明确支持 SignalR 的，这样前端无需改动，缩短开发周期。</p>
-<p>   3.当时 .Net Core 3.0即将发布，在提前公布的版本特性中，.Net Core 将支持 WPF ，而在 Windows 上客户端就是使用WPF 开发的。这意味着只要将Windows 上的客户端改写成 .Net Core ，往后的客户端版本迭代，只需要写一套核心代码就可以支持两个平台。</p>
-<p>　　</p>
+<p>​    1.Mac 本身自带Python2.7, 利用 Python 绘制 Gui , .Net core 作为它的核心服务。（.Net Core能打包成单文件）减少依赖环境。</p>
+<p>​    2.Windows上客户端使用 SignalR 与前端进行通讯, Core是明确支持 SignalR 的, 这样前端无需更改，缩短开发周期。</p>
+<p>   3.当时 .Net Core 3.0即将发布, 在提前公布的版本特性中, .Net Core 将支持 WPF , 而在 Windows 上客户端就是使用 WPF 开发的。这意味着只要将Windows 上的客户端改写成 .Net Core , 往后的客户端版本迭代, 只需要写一套核心代码就可以支持两个平台。</p>
+<p>当然这个方案被否决了，公司要求使用 Xamarin 。</p>
+<h2 id="问题一：Xamarin-Mac-能直接使用SignalR-吗？"><a href="#问题一：Xamarin-Mac-能直接使用SignalR-吗？" class="headerlink" title="问题一：Xamarin.Mac 能直接使用SignalR 吗？"></a>问题一：<strong>Xamarin.Mac 能直接使用SignalR 吗？</strong></h2><p>答案是可行的。</p>
+<p>在面向搜索编程的基础下，我在Xamarin 社区找到一篇<a href="https://forums.xamarin.com/discussion/35226/signalr-for-xamarin-mac" target="_blank" rel="noopener">问答</a>，从这篇文章可知，有人成功地在Xamarin Mac 项目中使用了 SignalR。</p>
+<p>虽然他并未给出具体实现的细节，但是依旧给我极大的鼓舞。</p>
+<p>至少目前行进的方向是可行的。</p>
+<h2 id="问题二：Xamarin并未涵盖我需要的引用库"><a href="#问题二：Xamarin并未涵盖我需要的引用库" class="headerlink" title="问题二：Xamarin并未涵盖我需要的引用库　　"></a>问题二：<strong>Xamarin并未涵盖我需要的引用库</strong>　　</h2><p>　　依靠着官方文档及旧代码，我开始了我的移植。我发现我缺少了一个库 Microsoft.Owin.Host.HttpListener，在复查了一遍资料以旧代码构建后，我意识到我必须依靠这个Dll 在客户端中开放一个本地端口，从而实现握手连接。</p>
 
         </div>
 
