@@ -250,9 +250,13 @@
 <p>在复查了一遍资料以旧代码构建后,我发现我缺少了一个库 Microsoft.Owin.Host.HttpListener，在复查了一遍资料以旧代码构建后，我意识到Windows 上创建本地端口就是依靠的它。</p>
 <p>问题是：Xamarin 的 Nuget 并未找到此包。</p>
 <p>但是随后，我在查阅Xamarin 文档的时，发现Xamarin有三个不同的目标框架，双击解决方案，打开项目选项，选择常规可以看到。（如下图） </p>
-<p><img src="..%5Cimages%5CxamarinSeting.png" alt="图片"></p>
-<p><img src="..%5Cimages%5Cxamarindocument.png" alt="图片"></p>
 <p><img src="https://img2018.cnblogs.com/blog/1292946/201909/1292946-20190915213125412-497490575.png" alt="img"></p>
+<p><img src="https://img2018.cnblogs.com/blog/1292946/201909/1292946-20190915213454793-2126640929.png" alt="img"></p>
+<p>　从文档中，我们可以看出，Xamarin.mac Full 使用的是“桌面”版本的子集，与.net Framework4.5及更高版本几乎完全相同。</p>
+<p>　　选择Xamarin.mac Full 后 重新生成解决方案，再次打开Nuget包管理，搜索Dll，成功找到，添加。</p>
+<p>　　编译通过，调式模式执行，打开前端测试页面进行连接测试。</p>
+<p>　　顺便说明一下，SignalR通讯可以在NetWork 的 WS 中看到传输内容。在Mac 上使用谷歌浏览器会报异常且无法看到传输协议，但奇怪的是并不影响正常通讯，只是无法查看。</p>
+<p><img src="https://img2018.cnblogs.com/blog/1292946/201909/1292946-20190918230804370-2093982957.png" alt="img"></p>
 
         </div>
 
