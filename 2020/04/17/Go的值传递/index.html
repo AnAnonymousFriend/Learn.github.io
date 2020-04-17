@@ -14,7 +14,7 @@
 
 
 
-<title>学习笔记——Go语言值类型和引用类型 | 面向兴趣编程</title>
+<title>学习笔记——函数参数的传递 | 面向兴趣编程</title>
 
 
 
@@ -42,45 +42,6 @@
     
     
         
-            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-    "HTML-CSS": {
-        preferredFont: "TeX",
-        availableFonts: ["STIX","TeX"],
-        linebreaks: { automatic:true },
-        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
-    },
-    tex2jax: {
-        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
-        processEscapes: true,
-        ignoreClass: "tex2jax_ignore|dno",
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    TeX: {
-        equationNumbers: { autoNumber: "AMS" },
-        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
-        Macros: { href: "{}" }
-    },
-    messageStyle: "none"
-    });
-</script>
-<!-- 给MathJax元素添加has-jax class -->
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax(), i;
-        for(i=0; i < all.length; i += 1) {
-            all[i].SourceElement().parentNode.className += ' has-jax';
-        }
-    });
-</script>
-<!-- 通过连接CDN加载MathJax的js代码 -->
-<script type="text/javascript" async
-        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
-
-
-        
     
 
 
@@ -94,6 +55,8 @@
             <div class="menu navbar-right">
                 
                     <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
                 
                     <a class="menu-item" href="/tag">Tags</a>
                 
@@ -117,6 +80,8 @@
             <div class="menu" id="mobile-menu">
                 
                     <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
                 
                     <a class="menu-item" href="/tag">Tags</a>
                 
@@ -144,11 +109,73 @@
             <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">学习笔记——Go语言值类型和引用类型</h1>
+            <h1 class="post-title">学习笔记——函数参数的传递</h1>
             
                 <div class="post-meta">
                     
@@ -157,7 +184,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">七月 5, 2019&nbsp;&nbsp;21:27:59</a>
+                        Date: <a href="#">四月 17, 2020&nbsp;&nbsp;14:39:00</a>
                         </span>
                     
                     
@@ -166,7 +193,22 @@
         </header>
 
         <div class="post-content">
-            
+            <h2 id="参数的传递"><a href="#参数的传递" class="headerlink" title="参数的传递"></a>参数的传递</h2><h2 id="对指针的疑惑"><a href="#对指针的疑惑" class="headerlink" title="对指针的疑惑"></a>对指针的疑惑</h2><p>Go语言中保留了指针这个特性，虽然不能像C/C++那样进行指针运算，但是它允许控制特定集合的数据结构，分配的数量以及内存访问模式。</p>
+<p>初看这句话会让从来没接触过指针的初级程序员难以理解（例如我）</p>
+<blockquote>
+<p>.Net 保留了对指针的操作，但开发人员一般不会考虑去使用它，使用指针操作需要开启 “不安全的代码”选项</p>
+</blockquote>
+<p>指针的定义：一个指针变量可以指向任何一个值的内存地址。</p>
+<p><img src="http://q8tvc7ofj.bkt.clouddn.com/carbon.png" alt="img"></p>
+<p>我们可以通过上面这段代码来理解一下指针，我们声明了一个 int 类型 i ，一个 string 类型 str 。使用 &amp; 操作符可以就可以取出变量存放在内存中的地址。</p>
+<h2 id="指针在函数中传递"><a href="#指针在函数中传递" class="headerlink" title="指针在函数中传递"></a>指针在函数中传递</h2><p>通常在编写函数的时候，开发者往往要考虑一个问题：使用什么类型的值作为参数的传递。</p>
+<p>我们先来看一下在Go语言中对值类型和引用类型的定义</p>
+<p>值类型：int, float , bool 和 string 都属于值类型。它们直接指向内存中的值，值类型的变量存储在栈中。</p>
+<p>引用类型：slice, map, channel 都属于引用类型。引用代指某个内存地址。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://draveness.me/golang/docs/part2-foundation/ch04-basic/golang-function-call/" target="_blank" rel="noopener">Go语言设计与实现—函数的调用</a></p>
+<p><a href="https://blog.csdn.net/li_101357/article/details/80199636/" target="_blank" rel="noopener">Go语言中的值类型和引用类型</a></p>
+<p><a href="http://c.biancheng.net/view/21.html" target="_blank" rel="noopener">Go语言指针详解，看这一篇文章就够了</a></p>
+
         </div>
 
         
@@ -180,7 +222,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://ananonymousfriend.github.io/2019/07/05/Go%E7%9A%84%E5%80%BC%E4%BC%A0%E9%80%92/">https://ananonymousfriend.github.io/2019/07/05/Go%E7%9A%84%E5%80%BC%E4%BC%A0%E9%80%92/</a></span>
+                        <span><a href="https://ananonymousfriend.github.io/2020/04/17/Go%E7%9A%84%E5%80%BC%E4%BC%A0%E9%80%92/">https://ananonymousfriend.github.io/2020/04/17/Go%E7%9A%84%E5%80%BC%E4%BC%A0%E9%80%92/</a></span>
                     </p>
                 
                 
@@ -205,6 +247,10 @@
                     
                     
                         <a href="/tags/Go/"># Go</a>
+                    
+                        <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"># 学习笔记</a>
+                    
+                        <a href="/tags/%E5%87%BD%E6%95%B0/"># 函数</a>
                     
                         
                 </span>
