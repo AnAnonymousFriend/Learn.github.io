@@ -95,8 +95,6 @@
                 
                     <a class="menu-item" href="/archives">Posts</a>
                 
-                    <a class="menu-item" href="/category">Categories</a>
-                
                     <a class="menu-item" href="/tag">Tags</a>
                 
                     <a class="menu-item" href="/about">About</a>
@@ -119,8 +117,6 @@
             <div class="menu" id="mobile-menu">
                 
                     <a class="menu-item" href="/archives">Posts</a>
-                
-                    <a class="menu-item" href="/category">Categories</a>
                 
                     <a class="menu-item" href="/tag">Tags</a>
                 
@@ -247,7 +243,7 @@
 <p>虽然他并未给出具体实现的细节，但是依旧给我极大的鼓舞。</p>
 <p>至少目前行进的方向是可行的。</p>
 <h2 id="问题二：Xamarin并未涵盖我需要的引用库"><a href="#问题二：Xamarin并未涵盖我需要的引用库" class="headerlink" title="问题二：Xamarin并未涵盖我需要的引用库　　"></a>问题二：<strong>Xamarin并未涵盖我需要的引用库</strong>　　</h2><p>依靠着官方文档及旧代码，我开始了我的移植。</p>
-<p>在复查了一遍资料以旧代码构建后,我发现我缺少了一个库 Microsoft.Owin.Host.HttpListener，在复查了一遍资料以旧代码构建后，我意识到Windows 上创建本地端口就是依靠的它。</p>
+<p>很快地我发现我缺少了一个库 Microsoft.Owin.Host.HttpListener，在复查了一遍资料以旧代码构建后,我意识到Windows 上创建本地端口就是依靠的它。</p>
 <p>问题是：Xamarin 的 Nuget 并未找到此包。</p>
 <p>但是随后，我在查阅Xamarin 文档的时，发现Xamarin有三个不同的目标框架，双击解决方案，打开项目选项，选择常规可以看到。（如下图） </p>
 <p><img src="http://q8tvc7ofj.bkt.clouddn.com/1292946-20190915213125412-497490575.png" alt="img"></p>
@@ -271,7 +267,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://ananonymousfriend.github.io/2019/07/05/hello-world/">https://ananonymousfriend.github.io/2019/07/05/hello-world/</a></span>
+                        <span><a href="https://ananonymousfriend.github.io/2019/07/05/helloXamarin/">https://ananonymousfriend.github.io/2019/07/05/helloXamarin/</a></span>
                     </p>
                 
                 
@@ -309,6 +305,8 @@
             </div>
         </section>
         <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/07/05/Go%E7%9A%84%E5%80%BC%E4%BC%A0%E9%80%92/">学习笔记——Go语言值类型和引用类型</a>
             
             
         </section>
