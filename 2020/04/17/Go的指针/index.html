@@ -14,7 +14,7 @@
 
 
 
-<title>学习笔记——函数参数的传递 | 面向兴趣编程</title>
+<title>Go语言的 | 面向兴趣编程</title>
 
 
 
@@ -175,7 +175,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">学习笔记——函数参数的传递</h1>
+            <h1 class="post-title">Go语言的</h1>
             
                 <div class="post-meta">
                     
@@ -200,21 +200,20 @@
         </header>
 
         <div class="post-content">
-            <h2 id="对指针的疑惑"><a href="#对指针的疑惑" class="headerlink" title="对指针的疑惑"></a>对指针的疑惑</h2><p>Go语言中保留了指针这个特性，虽然不能像C/C++那样进行指针运算，但是它允许控制特定集合的数据结构，分配的数量以及内存访问模式。</p>
-<p>初看这句话会让从未接触过指针的初级程序员难以理解（例如我）</p>
+            <h2 id="对指针的疑惑"><a href="#对指针的疑惑" class="headerlink" title="对指针的疑惑"></a>对指针的疑惑</h2><h2 id="初见指针"><a href="#初见指针" class="headerlink" title="初见指针"></a>初见指针</h2><p>Go语言中保留了指针这个特性，虽然不能像C/C++那样进行指针运算，但是它允许控制特定集合的数据结构，分配的数量以及内存访问模式。</p>
 <blockquote>
-<p>.Net 保留了对指针的操作，但开发人员一般不会考虑去使用它，使用指针操作需要开启 “不安全的代码”选项</p>
+<p>C# 中保留了对指针的操作，但开发人员一般不会考虑去使用它，使用指针操作需要开启 “不安全的代码”选项</p>
 </blockquote>
-<p>指针的定义：一个指针变量可以指向任何一个值的内存地址。</p>
-<p><img src="https://s1.ax1x.com/2020/04/18/JexqxJ.png" alt="img"></p>
-<p>我们可以通过上面这段代码来理解一下指针，我们声明了一个 int 类型 i ，一个 string 类型 str 。使用 &amp; 操作符可以就可以取出变量存放在内存中的地址。</p>
-<h2 id="指针使用"><a href="#指针使用" class="headerlink" title="指针使用"></a>指针使用</h2><p>通常在编写函数的时候，开发者往往要考虑一个问题：使用什么类型的值作为参数的传递。</p>
-<p>我们先来看一下在Go语言中对值类型和引用类型的定义</p>
-<p>值类型：int, float , bool 和 string 都属于值类型。它们直接指向内存中的值，值类型的变量存储在栈中。</p>
-<p>引用类型：slice, map, channel 都属于引用类型。引用代指某个内存地址。</p>
+<p>初见这个定义会让从未接触过指针的初级程序员难以理解（例如我），不过我们可以依靠实际的使用方式来反推这个概念。</p>
+<p>在Go语言中，指针的使用涉及到两个操作符：“&amp;” 和 “ * ”。</p>
+<p><img src="https://s1.ax1x.com/2020/05/09/Y1EvZT.png" alt="Y1EvZT.png"></p>
+<p>我们可以通过上面这段代码来理解第一个操作符 “&amp;”（地址取值）。我们声明了两个变量，一个 int 类型 i ，一个 string 类型 str 。通过 &amp; 操作符可以看到变量存放在内存中的地址。</p>
+<blockquote>
+<p>指针的值是0xc00000a0d0 这种十六进制的一组数据。</p>
+</blockquote>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://draveness.me/golang/docs/part2-foundation/ch04-basic/golang-function-call/" target="_blank" rel="noopener">Go语言设计与实现—函数的调用</a></p>
 <p><a href="https://blog.csdn.net/li_101357/article/details/80199636/" target="_blank" rel="noopener">Go语言中的值类型和引用类型</a></p>
-<p><a href="http://c.biancheng.net/view/21.html" target="_blank" rel="noopener">Go语言指针详解，看这一篇文章就够了</a></p>
+<p><a href="http://c.biancheng.net/view/21.html" target="_blank" rel="noopener">Go语言指针详解</a></p>
 
         </div>
 
@@ -229,7 +228,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://ananonymousfriend.github.io/2020/04/17/Go%E7%9A%84%E5%80%BC%E4%BC%A0%E9%80%92/">https://ananonymousfriend.github.io/2020/04/17/Go%E7%9A%84%E5%80%BC%E4%BC%A0%E9%80%92/</a></span>
+                        <span><a href="https://ananonymousfriend.github.io/2020/04/17/Go%E7%9A%84%E6%8C%87%E9%92%88/">https://ananonymousfriend.github.io/2020/04/17/Go%E7%9A%84%E6%8C%87%E9%92%88/</a></span>
                     </p>
                 
                 
