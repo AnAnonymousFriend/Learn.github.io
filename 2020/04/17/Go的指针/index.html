@@ -207,12 +207,19 @@
 </blockquote>
 <p>在Go语言中, 指针的使用涉及到两个操作符：<code>&amp;</code> 和 <code>*</code></p>
 <p><img src="https://s1.ax1x.com/2020/05/09/Y1EvZT.png" alt="Y1EvZT.png"></p>
-<p>我们可以通过上面这段代码来理解第一个操作符 “&amp;”（地址取值）。我们声明了两个变量，一个 int 类型 i ，一个 string 类型 str 。通过 <code>&amp;</code> 操作符可以看到变量 i 和 str 存放在内存中的地址。</p>
+<p>我们先来理解第一个操作符 <code>&amp;</code>（地址取值）。</p>
+<p>我们声明了一个 string 类型的变量 str 。通过 <code>&amp;</code> 操作符可以看到变量 str 存放在内存中的地址。</p>
 <p><img src="https://s1.ax1x.com/2020/05/11/YGxOOO.png" alt="YGxOOO.png"></p>
-<p>我们发现 <code>*</code> 和 <code>&amp;</code> 其实是一对互补操作符。<code>&amp;</code>操作符取出<code>0xc00000a0d0</code> 这种十六进制的数据, <code>*</code>指向某一个变量的地址取值, mystrP 它指向的其实是 mystr 的值 “Hello!” 的内存地址。</p>
-<p><code>*</code>  不仅可以接受 <code>&amp;</code> 传递的值，还可以更改值。</p>
+<p>通过上述代码我们不难看出 <code>*</code> 和 <code>&amp;</code> 其实是一对互补操作符。<code>&amp;</code>操作符取出<code>0xc00000a0d0</code> 这种十六进制的数据, <code>*</code>指向某一个变量的地址取值, mystrP 它指向的其实是 mystr 的值 “Hello!” 的内存地址。</p>
+<p>其实 <code>*</code>  不仅可以接受 <code>&amp;</code> 传递的值，还可以更改值。</p>
 <p><img src="https://s1.ax1x.com/2020/05/13/YwSIHI.png" alt="YwSIHI.png"></p>
-<p>现在我们来解读一下这段代码。</p>
+<p>现在我们来解读一下这段代码:</p>
+<p>1.声明一个名为 mystr 的 string 类型变量，赋值为 “Hello”</p>
+<p>2.声明一个 string 类型的指针变量 mystrP, 并将 mystr 的内存地址<code>0xc0000441f0</code>赋值给它。</p>
+<p>3.输出mystrP的值, <code>0xc0000441f0</code>（注意，<code>0xc0000441f0</code>是mystrP的值, 并不是mystrP的内存地址）</p>
+<p>4.声明一个名为 mystrV 的 string 类型变量，赋值为 “Hello world”</p>
+<p>5.将mystrV 的地址赋予 mystrP</p>
+<p>6.将mystrp 赋值给 mystr</p>
 <h2 id="指针和引用类型的区别"><a href="#指针和引用类型的区别" class="headerlink" title="指针和引用类型的区别"></a>指针和引用类型的区别</h2><p>作者在学习的过程中发现部分博客中提到指针类型的引用类型区别：可以将引用类型简单理解为指针类型，或指针类型和引用类型没有区别。</p>
 <p>这让作者产生了一个新的疑问：既然引用类型和指针类型没有区别，那么在设计Go语言时为什么要加入<code>指针</code>这个概念？</p>
 <p><img src="https://s1.ax1x.com/2020/05/11/YJBLnJ.png" alt="YJBLnJ.png"></p>
