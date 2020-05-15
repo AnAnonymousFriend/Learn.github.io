@@ -208,16 +208,17 @@
 <p>在Go语言中, 指针的使用涉及到两个操作符：<code>&amp;</code> 和 <code>*</code>。我们通过下面一小段示例代码，来理解第一个操作符 <code>&amp;</code>（地址取值）。</p>
 <p><a href="https://imgchr.com/i/YseMmn" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/05/15/YseMmn.png" alt="YseMmn.png"></a></p>
 <p>通过输出的值我们能够发现, 加上<code>&amp;</code>操作符后输出的值为<code>0xc0000441f0</code>这种十六进制的数据, 这是变量在内存中存放的地址。但是这种十六进制的数据是机器识别的, 工程师们没办法直接对它进行更改。</p>
-<p>所以我们需要 <code>*</code> 操作符去接收它。</p>
-<p><img src="https://s1.ax1x.com/2020/05/13/YwSIHI.png" alt="YwSIHI.png"></p>
-<p>现在我们来解读一下这段代码:</p>
-<p>1.声明一个名为 mystr 的 string 类型变量，赋值为 “Hello”</p>
-<p>2.声明一个 string 类型的指针变量 mystrP, 并将 mystr 的内存地址<code>0xc0000441f0</code>赋值给它。</p>
-<p>3.输出mystrP的值, <code>0xc0000441f0</code>（注意，<code>0xc0000441f0</code>是mystrP的值, 并不是mystrP的内存地址）</p>
-<p>4.声明一个名为 mystrV 的 string 类型变量，赋值为 “Hello world”</p>
-<p>5.将mystrV 的地址赋予 mystrP</p>
-<p>6.将mystrp 赋值给 mystr </p>
-<h2 id="指针和引用类型的区别"><a href="#指针和引用类型的区别" class="headerlink" title="指针和引用类型的区别"></a>指针和引用类型的区别</h2><p>作者在学习的过程中发现部分博客中提到指针类型的引用类型区别：可以将引用类型简单理解为指针类型，或指针类型和引用类型没有区别。</p>
+<p>这时候我们就需要使用第二个操作符 <code>*</code> 去接收内存取值的数据。</p>
+<p><img src="https://s1.ax1x.com/2020/05/15/Ysd8N8.png" alt="Ysd8N8.png"></p>
+<p>从上述这段代码我们不难看出, <code>*</code> 和 <code>&amp;</code> 操作符的使用是互补的。 <code>&amp;</code> 取出来的值需要依靠 <code>*</code> 来接收，而<code>*</code> 得通过 十六进制数据来指向某一个变量的值。</p>
+<p>小结：</p>
+<ol>
+<li><p>mystrP是一个 string 类型的指针变量，它能接收<code>0xc0000441f0</code>这种十六进制的数据。</p>
+</li>
+<li><p>*mystrP不是取 mystrP 指针的值, 而是 “mystrP指向的变量”。</p>
+</li>
+</ol>
+<h2 id="指针在函数中的使用"><a href="#指针在函数中的使用" class="headerlink" title="指针在函数中的使用"></a>指针在函数中的使用</h2><h2 id="指针和引用类型的区别"><a href="#指针和引用类型的区别" class="headerlink" title="指针和引用类型的区别"></a>指针和引用类型的区别</h2><p>作者在学习的过程中发现部分博客中提到指针类型的引用类型区别：可以将引用类型简单理解为指针类型，或指针类型和引用类型没有区别。</p>
 <p>这让作者产生了一个新的疑问：既然引用类型和指针类型没有区别，那么在设计Go语言时为什么要加入<code>指针</code>这个概念？</p>
 <p><img src="https://s1.ax1x.com/2020/05/11/YJBLnJ.png" alt="YJBLnJ.png"></p>
 <p><a href="https://imgchr.com/i/YJN7lj" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/05/11/YJN7lj.png" alt="YJN7lj.png"></a></p>
