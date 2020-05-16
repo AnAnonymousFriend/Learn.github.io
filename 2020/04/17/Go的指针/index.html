@@ -207,17 +207,13 @@
 </blockquote>
 <p>在Go语言中, 指针的使用涉及到两个操作符：<code>&amp;</code> 和 <code>*</code>。我们通过下面一小段示例代码，来理解第一个操作符 <code>&amp;</code>（地址取值）。</p>
 <p><a href="https://imgchr.com/i/YseMmn" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/05/15/YseMmn.png" alt="YseMmn.png"></a></p>
-<p>通过输出的值我们能够发现, 加上<code>&amp;</code>操作符后输出的值为<code>0xc0000441f0</code>这种十六进制的数据, 这是变量在内存中存放的地址。但是这种十六进制的数据是机器识别的, 工程师们没办法直接对它进行更改。</p>
+<p>我们发现, 加上<code>&amp;</code>操作符后输出的值为<code>0xc0000441f0</code>这种十六进制的数据, 这是变量在内存中存放的地址。但是这种十六进制的数据是机器识别的, 工程师们没办法直接对它进行更改。</p>
 <p>这时候我们就需要使用第二个操作符 <code>*</code> 去接收内存取值的数据。</p>
 <p><img src="https://s1.ax1x.com/2020/05/15/Ysd8N8.png" alt="Ysd8N8.png"></p>
-<p>从上述这段代码我们不难看出, <code>*</code> 和 <code>&amp;</code> 操作符的使用是互补的。 <code>&amp;</code> 取出来的值需要依靠 <code>*</code> 来接收，而<code>*</code> 得通过 十六进制数据来指向某一个变量的值。</p>
-<p>小结：</p>
-<ol>
-<li><p>mystrP是一个 string 类型的指针变量，它能接收<code>0xc0000441f0</code>这种十六进制的数据。</p>
-</li>
-<li><p>*mystrP不是取 mystrP 指针的值, 而是 “mystrP指向的变量”。</p>
-</li>
-</ol>
+<p>从上述这段代码我们不难看出, <code>*</code> 和 <code>&amp;</code> 操作符的使用是互补的。 <code>&amp;</code> 取出来的值需要依靠 <code>*</code> 来接收, <code>*</code> 得通过 十六进制数据来指向某一个变量的值。</p>
+<p>仅仅指向内存地址是不能满足Go语言引入指针设计的初衷, 所以通过指针不止能够取值, 还能够修改值。我们继续看上述代码, 在这段代码中我们为 mystrP 的赋了两次值, 一次是变量 mystr 的内存地址<code>0xc0000581e0</code> ,此时它指向的内存地址已经发生了改变, 它现在指向的是 “Hello world” 的内存地址 <code>0xc0000581f</code>。</p>
+<p> *mystrP 赋值给 mystr 后我们可以看到 mystr 打印的值不再是 “Hello” 而是 “Hello world ” 。</p>
+<p>*mystrP不是取 mystrP 指针的值, 而是 “mystrP指向的变量”。</p>
 <h2 id="指针在函数中的使用"><a href="#指针在函数中的使用" class="headerlink" title="指针在函数中的使用"></a>指针在函数中的使用</h2><h2 id="指针和引用类型的区别"><a href="#指针和引用类型的区别" class="headerlink" title="指针和引用类型的区别"></a>指针和引用类型的区别</h2><p>作者在学习的过程中发现部分博客中提到指针类型的引用类型区别：可以将引用类型简单理解为指针类型，或指针类型和引用类型没有区别。</p>
 <p>这让作者产生了一个新的疑问：既然引用类型和指针类型没有区别，那么在设计Go语言时为什么要加入<code>指针</code>这个概念？</p>
 <p><img src="https://s1.ax1x.com/2020/05/11/YJBLnJ.png" alt="YJBLnJ.png"></p>
