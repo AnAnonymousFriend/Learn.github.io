@@ -216,17 +216,15 @@
 <p>这里我们要注意一个地方:  *mystrP 不是取 mystrP 指针的值, 而是 “mystrP 指向的变量”</p>
 <p>通俗点讲, *mystrP 会根据<code>0xc0000581f0</code>这个地址找到 “Hello world” 我们根据打印 *mystrP 的类型也能发现, 它不是 *string, 它是一个 string 类型</p>
 <p>这也能解释,为什么将 *mystrP 赋值给 mystr后, 打印的值不再是 “Hello” 而是 “Hello world ” </p>
-<h2 id="指针在函数中的使用"><a href="#指针在函数中的使用" class="headerlink" title="指针在函数中的使用"></a>指针在函数中的使用</h2><p>我们在声明有参函数时, 需要先考虑一个问题：是使用值类型, 还是使用引用类型？</p>
-<blockquote>
-<p>传值：函数调用时会对参数进行拷贝，被调用方和调用方两者持有不相关的两份数据；</p>
-<p>传引用：函数调用时会传递参数的指针，被调用方和调用方两者持有相同的数据，任意一方做出的修改都会影响另一方。</p>
-<p>不同语言会选择不同的方式传递参数，Go 语言选择了传值的方式，<strong>无论是传递基本类型、结构体还是指针，都会对传递的参数进行拷贝</strong>。本节剩下的内容将会验证这个结论的正确性。</p>
-</blockquote>
+<h2 id="指针在函数中的使用"><a href="#指针在函数中的使用" class="headerlink" title="指针在函数中的使用"></a>指针在函数中的使用</h2><p>我们在声明有参函数时, 需要先考虑一个问题：是使用值类型, 还是使用引用类型？这个问题影响的是当我们在函数中对入参进行修改时会发生怎样的变化。</p>
+<p>我们先揭露第一个概念：Go 语言选择了传值的方式，<strong>无论是传递基本类型、结构体还是指针，都会对传递的参数进行拷贝</strong>。</p>
+<p><a href="https://imgchr.com/i/tSDHbR" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/05/24/tSDHbR.png" alt="tSDHbR.png"></a></p>
+<p>从运行的结果我们可以看出：函数传递变量的过程中做了一次值拷贝, 即1, 2组的内存地址发生变化。</p>
 <h2 id="指针和引用类型的区别"><a href="#指针和引用类型的区别" class="headerlink" title="指针和引用类型的区别"></a>指针和引用类型的区别</h2><p>作者在学习的过程中发现部分博客中提到指针类型的引用类型区别：可以将引用类型简单理解为指针类型，或指针类型和引用类型没有区别。</p>
 <p>这让作者产生了一个新的疑问：既然引用类型和指针类型没有区别，那么在设计Go语言时为什么要加入<code>指针</code>这个概念？</p>
 <p><img src="https://s1.ax1x.com/2020/05/11/YJBLnJ.png" alt="YJBLnJ.png"></p>
 <p><a href="https://imgchr.com/i/YJN7lj" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/05/11/YJN7lj.png" alt="YJN7lj.png"></a></p>
-<h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p><a href="https://draveness.me/golang/docs/part2-foundation/ch04-basic/golang-function-call/" target="_blank" rel="noopener">Go语言设计与实现—函数的调用</a></p>
+<h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p> <a href="https://draveness.me/golang/docs/part2-foundation/ch04-basic/golang-function-call/" target="_blank" rel="noopener">Go语言设计与实现—函数的调用</a></p>
 <p><a href="https://blog.csdn.net/li_101357/article/details/80199636/" target="_blank" rel="noopener">Go语言中的值类型和引用类型</a></p>
 <p><a href="http://c.biancheng.net/view/21.html" target="_blank" rel="noopener">Go语言指针详解</a></p>
 <p><a href="https://blog.csdn.net/hel12he/article/details/80590519" target="_blank" rel="noopener">我所理解的 Go语言指针</a></p>
