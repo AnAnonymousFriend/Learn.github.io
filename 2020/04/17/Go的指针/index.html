@@ -225,11 +225,10 @@
 <p><img src="https://s1.ax1x.com/2020/05/26/tiWCSH.png" alt="tiWCSH.png"></p>
 <p>在这段代码中, 我们在MyFunction函数中加入了一个修改值的操作, 并且将各个变量值打印出来进行对比。</p>
 <p>先看 <code>a</code> 的变化，我们可以发现 <code>a</code> 在函数中进行过一次赋值操作, 从函数内打印参数也能发现值的确也发生了变化, 但是从打印的结果看来, MyFunction 函数中对变量 <code>a</code> 进行赋值操作似乎改变不了函数 main 的值. 这进一步验证 <strong>函数会对传递的参数进行拷贝</strong> 这个概念. 因为是值拷贝, 相当于在函数内部声明了一个局部变量 <code>a</code> 所以在函数内部修改无法影响到 main 函数中的参数.</p>
-<p>看到这里大家可能会产生新的疑问, 既然函数对入参会进行拷贝, 那参数 <code>b</code> 在函数MyFunction内部进行参数的更改后为什么会影响到 main函数中的参数 <code>b</code> . 这里要注意的是：b参数是指针类型进行传递的.</p>
-<h2 id="指针和引用类型的区别"><a href="#指针和引用类型的区别" class="headerlink" title="指针和引用类型的区别"></a>指针和引用类型的区别</h2><p>作者在学习的过程中发现部分博客中提到指针类型的引用类型区别：可以将引用类型简单理解为指针类型，或指针类型和引用类型没有区别。</p>
-<p>这让作者产生了一个新的疑问：既然引用类型和指针类型没有区别，那么在设计Go语言时为什么要加入<code>指针</code>这个概念？</p>
-<p><img src="https://s1.ax1x.com/2020/05/11/YJBLnJ.png" alt="YJBLnJ.png"></p>
-<p><a href="https://imgchr.com/i/YJN7lj" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/05/11/YJN7lj.png" alt="YJN7lj.png"></a></p>
+<p>看到这里大家可能会产生新的疑问, 既然函数对入参会进行拷贝, 那参数 <code>b</code> 在函数MyFunction内部进行参数的更改后为什么会影响到 main函数中的参数 <code>b</code> . 这里要注意的是：b参数是使用指针进行传递的, 在函数内拷贝的指针会指向原有的内存地址.  </p>
+<p><img src="https://s1.ax1x.com/2020/05/28/tZ5vLT.png" alt="tZ5vLT.png"></p>
+<p>这种模式可以理解成两方访问的公共变量,任意一方更改, 都会影响到另外一方.  </p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这一章我们讲述了指针的基本使用,以及指针在函数中</p>
 <h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p> <a href="https://draveness.me/golang/docs/part2-foundation/ch04-basic/golang-function-call/" target="_blank" rel="noopener">Go语言设计与实现—函数的调用</a></p>
 <p><a href="https://blog.csdn.net/li_101357/article/details/80199636/" target="_blank" rel="noopener">Go语言中的值类型和引用类型</a></p>
 <p><a href="http://c.biancheng.net/view/21.html" target="_blank" rel="noopener">Go语言指针详解</a></p>
