@@ -228,7 +228,10 @@
 <p>看到这里大家可能会产生新的疑问, 既然函数对入参会进行拷贝, 那参数 <code>b</code> 在函数MyFunction内部进行参数的更改后为什么会影响到 main函数中的参数 <code>b</code> . 这里要注意的是：b参数是使用指针进行传递的, 在函数内拷贝的指针会指向原有的内存地址.  </p>
 <p><img src="https://s1.ax1x.com/2020/05/28/tZ5vLT.png" alt="tZ5vLT.png"></p>
 <p>这种模式可以理解成两方访问的公共变量,任意一方更改, 都会影响到另外一方.  </p>
-<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这一章我们讲述了指针的基本使用,以及指针在函数中</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>这一章我们讲述了指针的基本使用,以及指针在函数中使用带来的变化, 可以简单总结以下几条规则：</p>
+<p>1.指针可以控制某些数据结构,灵活地更改它们的值.</p>
+<p>2.函数在声明时, 需要考虑使用值类型还是引用类型, 如果需要更改原参那么就选择引用类型或指针.如果不需要就使用值类型.</p>
+<p>2.传递数据可以使用指针,它们占据内存更小,更方便. </p>
 <h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p> <a href="https://draveness.me/golang/docs/part2-foundation/ch04-basic/golang-function-call/" target="_blank" rel="noopener">Go语言设计与实现—函数的调用</a></p>
 <p><a href="https://blog.csdn.net/li_101357/article/details/80199636/" target="_blank" rel="noopener">Go语言中的值类型和引用类型</a></p>
 <p><a href="http://c.biancheng.net/view/21.html" target="_blank" rel="noopener">Go语言指针详解</a></p>
