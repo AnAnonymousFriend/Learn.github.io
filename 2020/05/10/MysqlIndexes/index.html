@@ -14,7 +14,7 @@
 
 
 
-<title>mysql索引 | 面向兴趣编程</title>
+<title>Mysql Indexes | 面向兴趣编程</title>
 
 
 
@@ -175,7 +175,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">mysql索引</h1>
+            <h1 class="post-title">Mysql Indexes</h1>
             
                 <div class="post-meta">
                     
@@ -200,13 +200,18 @@
         </header>
 
         <div class="post-content">
-            <p><img src="https://github-readme-stats.vercel.app/api?username=AnAnonymousFriend" alt="Anurag&#39;s github stats" title="![Anurag&#39;s github stats"></p>
-<h2 id="索引的基本概念"><a href="#索引的基本概念" class="headerlink" title="索引的基本概念"></a>索引的基本概念</h2><p>在讨论数据库查询优化有个绕不过去的坎: <strong>索引</strong></p>
-<p>对于后端开发人员来说,如果不希望数据库成为程序中的瓶颈,那优化查询效率是必不可少的一环。正确地使用索引可以有效提高查询性能, 但是索引也不是万能的,它在提高查询效率的同时也会影响到新增,删除,修改的效率。它依旧值得投资,即使你在工作中使用 EF 这样的 ORM 框架。</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在讨论数据库查询优化时, 索引优化几乎是查询优化最有效的手段了, 且“成本”低廉。</p>
 <blockquote>
-<p>EF 等ORM 框架能帮助开发者提高生产效率, 但个人认为 EF 并不适用复杂的查询,相反它会让复杂的查询变得更复杂。在复杂的查询条件下, 个人更偏向直接使用SQL</p>
+<p>这里的低廉指的是学习成本——即使是初学者在面对Mysql 一知半解的情况下，也可能误打误撞创建几个索引而提高查询效率。</p>
+</blockquote>
+<p>对于后端开发人员来说, 我们不应让数据库变成一个黑盒, 仅仅依靠ORM框架辅助我们操作数据。正确地使用索引可以有效提高查询性能，一个好的索引比一个糟糕的索引性能要高出不少。</p>
+<blockquote>
+<p>EF 等ORM 框架的确能帮助开发者提高生产效率, 但个人认为 EF 并不适用复杂的查询,相反它会让复杂的查询变得更复杂。</p>
+<p>在复杂的查询条件下, 个人更偏向直接使用SQL。</p>
 </blockquote>
 <p>要理解索引的基本概念, ‘书’本身就是最好的例子, 当我们想要查阅某个特定的章节时, 只需在目录中查询到对应的页码, 便可快速查阅到想要的内容。对于书来说, 目录便是它的 索引。</p>
+<h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p>高性能mysql</p>
+<p><a target="_blank" rel="noopener" href="https://juejin.im/book/6844733769996304392">MySQL 是怎样运行的：从根儿上理解 MySQL</a></p>
 
         </div>
 
