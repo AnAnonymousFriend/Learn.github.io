@@ -201,7 +201,7 @@
 
         <div class="post-content">
             <p>[TOC]</p>
-<h1 id="Linux-环境部署"><a href="#Linux-环境部署" class="headerlink" title="Linux 环境部署"></a>Linux 环境部署</h1><h2 id="一、ubuntu部署"><a href="#一、ubuntu部署" class="headerlink" title="一、ubuntu部署"></a>一、ubuntu部署</h2><h3 id="1-1-软件名单"><a href="#1-1-软件名单" class="headerlink" title="1.1 软件名单"></a>1.1 软件名单</h3><table>
+<h1 id="Linux-常用软件安装"><a href="#Linux-常用软件安装" class="headerlink" title="Linux 常用软件安装"></a>Linux 常用软件安装</h1><h2 id="Ubuntu"><a href="#Ubuntu" class="headerlink" title="Ubuntu"></a>Ubuntu</h2><h3 id="1-1-软件名单"><a href="#1-1-软件名单" class="headerlink" title="1.1 软件名单"></a>1.1 软件名单</h3><table>
 <thead>
 <tr>
 <th>软件</th>
@@ -217,6 +217,11 @@
 <tr>
 <td>MongoDB</td>
 <td>3.6 +</td>
+<td></td>
+</tr>
+<tr>
+<td>Genieacs</td>
+<td>最新</td>
 <td></td>
 </tr>
 </tbody></table>
@@ -239,6 +244,10 @@
 
 
 <h5 id="1-1-2-4-开放防火墙端口"><a href="#1-1-2-4-开放防火墙端口" class="headerlink" title="1.1.2.4 开放防火墙端口"></a>1.1.2.4 开放防火墙端口</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ iptables -A INPUT -p tcp -m state --state NEW -m tcp --dport 27017 -j ACCEPT</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="1-1-2-5-设置用户名和密码"><a href="#1-1-2-5-设置用户名和密码" class="headerlink" title="1.1.2.5  设置用户名和密码"></a>1.1.2.5  设置用户名和密码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">use admin</span><br><span class="line"></span><br><span class="line">db.createUser(</span><br><span class="line">    &#123;</span><br><span class="line">    user: &quot;admin&quot;,</span><br><span class="line">    pwd: “huoshen.info2020”,</span><br><span class="line">    roles: [&#123;role: ”userAdminAnyDatabase”,db:”genieacs”&#125;]</span><br><span class="line">    &#125;</span><br><span class="line">  )</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 
 
@@ -267,8 +276,6 @@
 
 <p>停止服务脚本</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fuser -k -n tcp 3000</span><br><span class="line">fuser -k -n tcp 7547</span><br><span class="line">fuser -k -n tcp 7557</span><br></pre></td></tr></table></figure>
-
-
 
 
 
