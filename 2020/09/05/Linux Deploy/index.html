@@ -279,6 +279,41 @@
 
 
 
+<h2 id="Docker-安装软件"><a href="#Docker-安装软件" class="headerlink" title="Docker 安装软件"></a>Docker 安装软件</h2><h3 id="1-1-软件名单-1"><a href="#1-1-软件名单-1" class="headerlink" title="1.1 软件名单"></a>1.1 软件名单</h3><table>
+<thead>
+<tr>
+<th>软件</th>
+<th>版本</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MongoDB</td>
+<td>最新</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h4 id="Centos-安装Docker"><a href="#Centos-安装Docker" class="headerlink" title="Centos 安装Docker"></a>Centos 安装Docker</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yum install docker</span><br></pre></td></tr></table></figure>
+
+<h5 id="服务管理"><a href="#服务管理" class="headerlink" title="服务管理"></a>服务管理</h5><ul>
+<li>启动：sudo systemctl start docker</li>
+<li>停止：sudo systemctl stop docker</li>
+<li>重启：sudo systemctl restart docker</li>
+</ul>
+<h4 id="1-1-1-MongoDB"><a href="#1-1-1-MongoDB" class="headerlink" title="1.1.1 MongoDB"></a>1.1.1 MongoDB</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 拉取mongo</span><br><span class="line">$ docker pull mongo</span><br><span class="line"></span><br><span class="line"># 启动mongo</span><br><span class="line">$ docker run -d -p 27017:27017 -v mongo_configdb:&#x2F;data&#x2F;configdb -v mongo_db:&#x2F;data&#x2F;db --name mongo docker.io&#x2F;mongo</span><br></pre></td></tr></table></figure>
+
+
+
 
         </div>
 
