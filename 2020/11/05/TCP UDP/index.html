@@ -184,7 +184,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">十月 16, 2020&nbsp;&nbsp;14:31:00</a>
+                        Date: <a href="#">十一月 5, 2020&nbsp;&nbsp;10:32:00</a>
                         </span>
                     
                     
@@ -200,11 +200,24 @@
         </header>
 
         <div class="post-content">
-            <h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><p><strong>TCP 是一个复杂的，稳定的传输协议。</strong></p>
-<p>当TCP 向另一端发送报文时，它需要先与目标服务建立连接，确认目标状态，等双方状态都确认完毕后，才会发送报文信息，它会确认每个数据包是否发送成功，会重复发送失败的包。</p>
-<h4 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h4><h4 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h4><p>使用三次握手的主要原因：是为了将是否建立连接的最终控制权交给发送方，由发送方判断当前的连接是否错误或过期。</p>
+            <p>TCP 和 UDP 对于软件开发工程师来说并不陌生，学过计算机网络或对 TCP 协议稍有了解的人都懂得如何运用它们编写出各种程序。即使不懂协议具体实现的细节，也不妨碍各种框架帮助你去实现高性能的HTTP请求。</p>
+<p><strong>但是我们理应对每天使用的协议有一个初步的理解。</strong></p>
+<p>在这里作者并不会事无巨细地对协议的每个实现操作或状态转换进行分析，而是会抽离出重要的部分加以分析和讲解。</p>
+<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><p><strong>TCP 是一个复杂的，稳定的传输协议。</strong></p>
+<p>绝大多数网络连接的建立都是基于 TCP 协议的，这都源于它的可靠性。</p>
+<blockquote>
+<p>TCP 称之为可靠的协议，不代表它发送的数据包百分之百会被目标服务所接收到，<strong>它提供的是数据的可靠递送或故障的可靠通知。</strong></p>
+</blockquote>
+<p>TCP 向另一端发送报文时，它需要先与目标服务建立连接，确认目标状态，等双方状态都确认完毕后，才会发送报文信息，它会确认每个数据包是否发送成功，会重复发送失败的包。</p>
+<h4 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h4><p>使用三次握手的主要原因：是为了将是否建立连接的最终控制权交给发送方，由发送方判断当前的连接是否错误或过期。</p>
 <p>序列号在TCP中非常重要，它可以帮助数据包排序，补发丢失的包等。</p>
+<h4 id="流量控制"><a href="#流量控制" class="headerlink" title="流量控制"></a>流量控制</h4><h4 id="终止连接"><a href="#终止连接" class="headerlink" title="终止连接"></a>终止连接</h4><p>TCP建立连接需要三次握手，终止连接则需要进行四步操作。</p>
+<p>1.客户端调用Close </p>
 <h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><p><strong>UDP 是一个简单，不稳定的传输协议。</strong>它不保证数据报文会到达目的地，也不保证报文的发送顺序，也不保证报文只到达一次。</p>
+<h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p>《网络是怎么连接的》</p>
+<p>《UNIX网络编程卷1：套接字联网API》</p>
+<p><a target="_blank" rel="noopener" href="https://draveness.me/whys-the-design-tcp-three-way-handshake/">为什么TCP需要三次握手</a></p>
+<p><a target="_blank" rel="noopener" href="https://draveness.me/whys-the-design-dns-udp-tcp/">为什么 DNS 使用 UDP 协议</a></p>
 
         </div>
 
@@ -219,7 +232,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://ananonymousfriend.github.io/2020/10/16/TCP%20UDP/">https://ananonymousfriend.github.io/2020/10/16/TCP%20UDP/</a></span>
+                        <span><a href="https://ananonymousfriend.github.io/2020/11/05/TCP%20UDP/">https://ananonymousfriend.github.io/2020/11/05/TCP%20UDP/</a></span>
                     </p>
                 
                 
@@ -243,6 +256,8 @@
                 <span class="tag">
                     
                     
+                        <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"># 学习笔记</a>
+                    
                         <a href="/tags/%E7%BD%91%E7%BB%9C/"># 网络</a>
                     
                         <a href="/tags/%E5%8D%8F%E8%AE%AE/"># 协议</a>
@@ -258,10 +273,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/10/16/G%20M%20P%20%E5%88%9D%E6%8E%A2/">G M P 调度模型</a>
             
-            
-            <a class="next" rel="next" href="/2020/09/05/Linux%20Deploy/">Linux 常用软件安装</a>
+            <a class="next" rel="next" href="/2020/10/16/G%20M%20P%20%E5%88%9D%E6%8E%A2/">G M P 调度模型</a>
             
         </section>
 
