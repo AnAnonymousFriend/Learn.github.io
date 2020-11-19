@@ -200,12 +200,12 @@
         </header>
 
         <div class="post-content">
-            <h2 id="G-M-P-调度模型"><a href="#G-M-P-调度模型" class="headerlink" title="G M P 调度模型"></a>G M P 调度模型</h2><p>提到并发编程， 最先想到进程，线程，锁，共享资源等这些技术名词。在多线程编程中我们能频繁看到各种 ‘锁’ 的应用，比如互斥锁。</p>
+            <h2 id="G-M-P-调度模型"><a href="#G-M-P-调度模型" class="headerlink" title="G M P 调度模型"></a>G M P 调度模型</h2><p>提到并发编程， 最先想到进程，线程，锁，共享资源等这些技术名词。在多线程编程中我们能频繁看到各种 ‘锁’ 的应用，比如互斥锁，排它锁，</p>
 <p>Go 语言内置强大的并发编程模型，我们可以从几个方面来谈论它的优势，比如它使用 Goroutine 这种轻型的线程模式，独特的Context,基于SCP 理论的管道传递资源的模型，以及专属它的调度器。</p>
 <p><strong>在这里我们重点谈论它的调度器模型。</strong></p>
 <p>沿用至今的GMP模型来源于 <strong>任务窃取调度器</strong> 这一方案，该方案在 G - M 模型中引入了中间层，处理器：P。</p>
 <p>G M P 的模型包含三个核心部分：</p>
-<p>G — Goroutine 它是最小运行单位，代表着一个执行任务。</p>
+<p>G — Goroutine是Go语言特有的并发体，是一种轻量级的线程。通常情况下它代表着一个执行任务。</p>
 <p>M — 表示操作系统的线程，它由操作系统的调度器调度和管理。</p>
 <p>P —  表示处理器，它可以被看做运行在线程上的本地调度器。</p>
 <h3 id="任务窃取调度器"><a href="#任务窃取调度器" class="headerlink" title="任务窃取调度器"></a>任务窃取调度器</h3><h3 id="抢占式任务调度器"><a href="#抢占式任务调度器" class="headerlink" title="抢占式任务调度器"></a>抢占式任务调度器</h3><h4 id="基于协作的抢占式调度器"><a href="#基于协作的抢占式调度器" class="headerlink" title="基于协作的抢占式调度器"></a>基于协作的抢占式调度器</h4><h4 id="基于信号的抢占式调度器"><a href="#基于信号的抢占式调度器" class="headerlink" title="基于信号的抢占式调度器"></a>基于信号的抢占式调度器</h4><h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p><a target="_blank" rel="noopener" href="https://draveness.me/golang/docs/part3-runtime/ch06-concurrency/golang-goroutine/">Go语言设计与实现—调度器</a></p>
@@ -265,7 +265,7 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/11/05/TCP%20UDP/">TCP/UDP</a>
+                <a class="prev" rel="prev" href="/2020/11/05/TCP%20UDP/">TCP and UDP</a>
             
             
             <a class="next" rel="next" href="/2020/09/05/Linux%20Deploy/">Linux 常用软件安装</a>

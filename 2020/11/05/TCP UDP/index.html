@@ -14,7 +14,7 @@
 
 
 
-<title>TCP/UDP | 面向兴趣编程</title>
+<title>TCP and UDP | 面向兴趣编程</title>
 
 
 
@@ -175,7 +175,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">TCP/UDP</h1>
+            <h1 class="post-title">TCP and UDP</h1>
             
                 <div class="post-meta">
                     
@@ -203,16 +203,20 @@
             <p>TCP 和 UDP 对于软件开发工程师来说并不陌生，学过计算机网络或对 TCP 协议稍有了解的人都懂得如何运用它们编写出各种程序。即使不懂协议具体实现的细节，也不妨碍各种框架帮助你去实现高性能的HTTP请求。</p>
 <p><strong>但是我们理应对协议有初步的理解。</strong></p>
 <p>在这里作者并不会事无巨细地对协议的每个实现操作或状态转换进行分析，而是会抽离出重要的部分加以分析和讲解。</p>
-<h2 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h2><p><strong>TCP 是一个复杂的，稳定的传输协议。</strong>绝大多数网络连接的建立都是基于 TCP 协议的。</p>
+<h2 id="TCP-IP"><a href="#TCP-IP" class="headerlink" title="TCP/IP"></a>TCP/IP</h2><p><strong>TCP 是一个复杂的，可靠的字节流协议。</strong>绝大多数网络连接的建立都是基于 TCP 协议的。</p>
 <p>TCP 作为一个可靠的协议，它需要先与目标服务建立连接，确认目标状态，等双方状态都确认完毕后，才会发送报文信息，它会确认每个数据包是否发送成功，会补发发送失败的包，也会过滤重复发送的包。</p>
 <blockquote>
 <p>TCP 称之为可靠的协议，不代表它发送的数据包百分之百会被目标服务所接收到，<strong>它提供的是数据的可靠递送或故障的可靠通知。</strong></p>
 </blockquote>
 <h4 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h4><p>TCP 在建立连接时会互相确认彼此的状态，这个确认状态的过程我们称之为 “三次握手”。</p>
+<p>首先我们默认服务端已经被动打开。</p>
+<p>1.客户主动发起连接，它告诉服务器客户将在（待建立的）连接中发送数据的初始序列号。(SYN分节不携带数据，只包含部分TCP选项)</p>
+<p>2.服务端确认客户的SYN,同时服务端发送一个SYN分节，这个分节内包含服务器将在同一连接中发送的数据初始序列号。</p>
+<p>3.客户必须确认服务器的SYN。</p>
 <p><a target="_blank" rel="noopener" href="https://imgchr.com/i/BfxmTA"><img src="https://s1.ax1x.com/2020/11/06/BfxmTA.png" alt="BfxmTA.png"></a></p>
-<p>​                                                                    本图来源于 UNIX网络编程卷1：套接字联网API</p>
+<p>​                                                                本图来源于 UNIX网络编程卷1：套接字联网API</p>
 <blockquote>
-<p>在这里我们可以稍稍思考一下，为什么TCP建立连接需要三次，而不是两次或四次。s</p>
+<p>在这里我们可以稍稍思考一下，为什么TCP建立连接需要三次，而不是两次或四次。</p>
 <p><strong>使用三次握手的主要原因：是为了将是否建立连接的最终控制权交给发送方，由发送方判断当前的连接是否错误或过期。</strong></p>
 </blockquote>
 <h4 id="序列号"><a href="#序列号" class="headerlink" title="序列号"></a>序列号</h4><p>序列号在TCP中非常重要，它可以帮助数据包排序，补发丢失的包等。</p>
