@@ -204,6 +204,7 @@
 <p><strong>但是我们理应对协议有初步的理解。</strong></p>
 <p>在这里作者并不会事无巨细地对协议的每个实现操作或状态转换进行分析，而是会抽离出重要的部分加以分析和讲解。</p>
 <h2 id="TCP-IP"><a href="#TCP-IP" class="headerlink" title="TCP/IP"></a>TCP/IP</h2><p><strong>TCP 是一个复杂的，可靠的字节流协议。</strong>绝大多数网络连接的建立都是基于 TCP 协议的。</p>
+<p>TCP 作为一个可靠的协议，它需要先与目标服务建立连接，确认目标状态，等双方状态都确认完毕后，才会发送报文信息，它会确认每个数据包是否发送成功，会补发发送失败的包，也会过滤重复发送的包。</p>
 <blockquote>
 <p>TCP 称之为可靠的协议，不代表它发送的数据包百分之百会被目标服务所接收到，<strong>它提供的是数据的可靠递送或故障的可靠通知。</strong></p>
 </blockquote>
@@ -215,14 +216,11 @@
 <p><a target="_blank" rel="noopener" href="https://imgchr.com/i/BfxmTA"><img src="https://s1.ax1x.com/2020/11/06/BfxmTA.png" alt="BfxmTA.png"></a></p>
 <h4 id="序列号"><a href="#序列号" class="headerlink" title="序列号"></a>序列号</h4><p>三次握手时，SYN分节中会发送一个初始序列号，这个序列号在TCP中非常重要。客户与服务端在得到各自期望的序列号后完成握手连接。</p>
 <p>对于较大的数据包，TCP会对数据包进行切分。为了保证数据包抵达目标位置，TCP会对每个数据包的序列号进行确认，它会对重复序列号的包去重，重复发送未确认的包，对包数据进行排序。</p>
-<p>假设客户端要将2048字节到一个TCP套接字，这将使TCP发送两个分节：第一节包含序列号为 1<del>1024，第二节序列号包含为 1025</del>2048。接受端的TCP会序列号排序，再把数据传递给应用。</p>
 <blockquote>
 <p>在这里我们可以稍稍思考一下，为什么TCP建立连接需要三次，而不是两次或四次。</p>
 <p><strong>使用三次握手的主要原因：是为了将是否建立连接的最终控制权交给发送方，由发送方判断当前的连接是否错误或过期。</strong></p>
 </blockquote>
-<h4 id="流量控制和拥塞控制"><a href="#流量控制和拥塞控制" class="headerlink" title="流量控制和拥塞控制"></a><strong>流量控制和拥塞控制</strong></h4><p>TCP总是告诉对端它一次能从对端接受多少字节的数据，这称之为 <strong>通告窗口</strong>。任何时刻，该窗口指出接受缓存区中当前可用的空间量，确保发送端发送的数据不会使接受缓存区溢出。这个窗口时实变化：当接受到来自发送端的数据时，窗口大小就减小。当接收端应用从缓冲区读取数据时，窗口大小就增大。</p>
-<p>如果窗口大小减小到0，代表TCP对应某个套接字的接受缓存区已满，那么它必须等待应用从缓存区读取数据，才能再接受数据。</p>
-<p>每一个TCP连接都会有一个拥塞控制的窗口，它决定了发送方同时能向接收方发送多少数据。</p>
+<h4 id="拥塞控制和流量窗口"><a href="#拥塞控制和流量窗口" class="headerlink" title="拥塞控制和流量窗口"></a><strong>拥塞控制</strong>和流量窗口</h4><p>每一个TCP连接都会有一个拥塞控制的窗口，它决定了发送方同时能向接收方发送多少数据。</p>
 <p>1.防止发送方向接收方发送了太多数据，导致接收方无法处理。</p>
 <p>2.防止双方传输数据过大，导致网络阻塞造成崩溃。</p>
 <h4 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h4><p>TCP建立连接需要三次握手，终止连接则需要进行四步操作。</p>
@@ -231,11 +229,6 @@
 <p>3.</p>
 <h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><p><strong>UDP 是一个简单，不稳定的传输协议。</strong></p>
 <p>它不保证数据报文会到达目的地，也不保证报文的发送顺序，也不保证报文只到达一次。</p>
-<blockquote>
-<p>如果想要使用UDP确保一个数据报到达其目的地，可以在应用程序中添加稳定特性：来自对端的确认，本端的超时与重传等。</p>
-</blockquote>
-<p>UDP提供无连接的服务，它可以创建一个套接字并发送一个数据报给某个服务器，然后立即用同一个套接字发送另一个数据报给另一个服务器。</p>
-<p>它和TCP不同，它是多对多的。</p>
 <h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p>《网络是怎么连接的》</p>
 <p>《UNIX网络编程卷1：套接字联网API》</p>
 <p><a target="_blank" rel="noopener" href="https://draveness.me/whys-the-design-tcp-three-way-handshake/">为什么TCP需要三次握手</a></p>
@@ -254,7 +247,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://ananonymousfriend.github.io/2020/11/05/TCP%20UDP/">https://ananonymousfriend.github.io/2020/11/05/TCP%20UDP/</a></span>
+                        <span><a href="https://ananonymousfriend.github.io/2020/11/05/TCP%20and%20UDP/">https://ananonymousfriend.github.io/2020/11/05/TCP%20and%20UDP/</a></span>
                     </p>
                 
                 
@@ -295,8 +288,10 @@
         </section>
         <section class="post-nav">
             
+                <a class="prev" rel="prev" href="/2020/11/05/TCP%20UDP/">TCP and UDP</a>
             
-            <a class="next" rel="next" href="/2020/11/05/TCP%20and%20UDP/">TCP and UDP</a>
+            
+            <a class="next" rel="next" href="/2020/10/16/G%20M%20P%20%E5%88%9D%E6%8E%A2/">G M P 调度模型</a>
             
         </section>
 
