@@ -207,6 +207,28 @@
 <p><strong>Broadcast 方法,</strong> 允许调用者  Caller 唤醒所有等待此 Cond 的 goroutine 。 如果此时没有等待的 goroutine，显然无需通知 waiter。如果 Cond 等待队列中有一个或者多个等待的 goroutine，则清空所有等待的 goroutine，并全部唤醒。</p>
 <p><strong>Wait 方法，</strong>会把调用者 Caller 放入 Cond 的等待队列中并阻塞，直到被 Signal 或者 Broadcast 的方法从等待队列中移除并唤醒。</p>
 <p>调用 Wait 方法时必须要持有 c.L 的锁。其他方法者无需。</p>
+<blockquote>
+<p>调用 cond.Wait 方法之前一定要加锁。</p>
+</blockquote>
+<p>Cond 和 一个Locker 关联, 可以利用这个 Locker 对相关依赖条件更改提供保护。</p>
+<p>Cond 可以同时支持 Signal 和 Broadcast 方法， 而 Channel 只能支持其中一种。</p>
+<p>Cond 的 Broadcast 方法可以被重复调用。等待条件再次变成不满足的状态后，我们又可以调用 Broadcast 再次唤醒等待的 goroutine。这也是 Channel 不能支持的， Channel 被 close 掉了之后不支持再 open。</p>
+<h2 id="Once"><a href="#Once" class="headerlink" title="Once"></a>Once</h2><p>Once 可以用来执行且仅仅执行一次动作，常常用于单例对象的初始化场景。</p>
+<p>sync.Once 只暴露了一个方法 Do, 你可以多次调用 Do 方法，但是只有第一次调用 Do 方法时 f 参数才会执行，这里的 f 是一个无参数无返回值的函数。</p>
+<p>Once 常用于初始化单例资源，或者并发访问只需初始化一次的共享资源，或者在测试的时候初始化一次测试资源。 </p>
+<p>一个正确的 Once 实现要使用一个互斥锁，这样初始化的时候如果有并发的 goroutine，就会进入doSlow 方法。互斥锁的机制保证只有一个 goroutine 进行初始化，同时利用双检查机制。</p>
+<h2 id="线程安全的-Map"><a href="#线程安全的-Map" class="headerlink" title="线程安全的 Map"></a>线程安全的 Map</h2><p>在 Go 中，map[key] 函数返回结果可以是一个值，也可以是两个值。这是因为，如果获取一个不存在的key 对应的值时，会返回零值。</p>
+<p>Go 内建的 map 对象不是线程安全的，并发读写的时候运行时会有检查，遇到并发问题就会导致 panic 。</p>
+<p><strong>避免 map 并发读写 panic 的方式之一就是加锁，考虑到读写性能，可以使用读写锁提供性能。</strong></p>
+<p><strong>分片加锁：更高效的并发 map</strong> 在大量并发读写的情况下，锁的竞争会非常激烈。在并发编程中，我们的一条原则就是尽量减少锁的使用。一些单线程的应用（Redis 等 ），基本上不需要使用锁去解决并发线程访问的问题，所以可以实现很高的性能。但是对于Go 来说，并发是常用的一个特性，在这种情况下我们应该，<strong>尽量减少锁的粒度和锁持有的时间。</strong></p>
+<p><strong>减少锁的粒度常用方法就是分片（Shard）</strong>，将一把锁分成几把锁，每个锁控制一个分片。</p>
+<p>它默认采用 32个分片，<strong>GetShard 是一个关键的方法，能根据 key 计算出分片索引。</strong></p>
+<p>解决 map 并发 panic 的两个方法：加锁和分片。</p>
+<p>如果追求更高的性能，分片加锁。因为它可以降低锁的颗粒度，进而提高访问此 map 对象的吞吐。如果并发性能要求不是那么高的场景，简单加锁方式更简单。</p>
+<p><strong>Sync.Map</strong></p>
+<p>Go 内建的 map 类型不是线程安全的，sync.Map 并不是用来替换内建的 map 类型的，它只能被应用在一些特殊场景内：</p>
+<p>只会增长的缓存系统中，一个key 只写入一次而被读很多次。</p>
+<p>多个 goroutine 为不相交的键集读，写和重写键值对。</p>
 
         </div>
 
