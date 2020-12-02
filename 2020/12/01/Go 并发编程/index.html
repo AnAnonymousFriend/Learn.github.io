@@ -227,8 +227,25 @@
 <p>如果追求更高的性能，分片加锁。因为它可以降低锁的颗粒度，进而提高访问此 map 对象的吞吐。如果并发性能要求不是那么高的场景，简单加锁方式更简单。</p>
 <p><strong>Sync.Map</strong></p>
 <p>Go 内建的 map 类型不是线程安全的，sync.Map 并不是用来替换内建的 map 类型的，它只能被应用在一些特殊场景内：</p>
-<p>只会增长的缓存系统中，一个key 只写入一次而被读很多次。</p>
-<p>多个 goroutine 为不相交的键集读，写和重写键值对。</p>
+<p>1.只会增长的缓存系统中，一个key 只写入一次而被读很多次。</p>
+<p>2.多个 goroutine 为不相交的键集读，写和重写键值对。</p>
+<p>Snyc.Map 的优点：</p>
+<p>空间换时间。通过冗余的两个数据结构（只读的 read 字段，可写的 dirty ）,来减少加锁对性能的影响。对只读字段（read）的操作不需要加锁。</p>
+<p>优先从 read 字段读取，更新，删除，因为对read字段的读取不需要锁。</p>
+<p>动态调整。miss 次数过多，将 dirty 数据提升为read，避免总是从 dirty 中加锁读取。</p>
+<p>double-checking。加锁之后还要再检查 read 字段，确定真的不存在才操作 dirty 字段。</p>
+<p>延迟删除。删除一个键值只是打标记，只有在提升dirty 字段为 read 字段的时候才清理删除的数据。</p>
+<h2 id="sync-Pool"><a href="#sync-Pool" class="headerlink" title="sync.Pool"></a>sync.Pool</h2><p>Go 标准库中提供了一个通用的 Pool 数据结构, 也就是 sync.pool，它可以创建池化对象。</p>
+<blockquote>
+<p>但是它的池化的对象可能会被垃圾回收掉，所以对于数据库长连接等场景是不合适的。</p>
+</blockquote>
+<p>sync.Pool 用来保存一组可独立访问的临时对象。它池化的对象会在未来的某个时候被移除掉。如果没有其他对象引用这个移除对象，那么这个被移除的对象就会被垃圾回收掉。</p>
+<p>sync.Pool 本身就是线程安全的，多个 goroutine 可以并发地调用它的方法存取对象。</p>
+<p>sync.Pool 不可在使用之后再复制使用。</p>
+<p>sync.Pool 提供三个对外方法：New，Get 和 Put。</p>
+<p><strong>New</strong> 是一个函数 func() interface{}。当调用 Pool 的 Get 方法从池中获取元素，没有更多的空闲元素可以返回时，会调用 New 方法来创建新的元素。如果没有设置 New 字段，将返回 nil。</p>
+<p><strong>Get</strong> 调用时会从Pool 取走一个元素，这代表着Pool 会移除这个元素。同时Pool 可能没有元素返回，这时Get 方法会去除一个 nil 。</p>
+<p><strong>Put</strong> 调用会将一个元素返回给 Pool ，Pool 将这个元素保存到池中，并且可以复用。但是如果 Put 一个 nil 值，Pool 则会忽略这个值。</p>
 
         </div>
 
