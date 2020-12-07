@@ -246,6 +246,23 @@
 <p><strong>New</strong> 是一个函数 func() interface{}。当调用 Pool 的 Get 方法从池中获取元素，没有更多的空闲元素可以返回时，会调用 New 方法来创建新的元素。如果没有设置 New 字段，将返回 nil。</p>
 <p><strong>Get</strong> 调用时会从Pool 取走一个元素，这代表着Pool 会移除这个元素。同时Pool 可能没有元素返回，这时Get 方法会去除一个 nil 。</p>
 <p><strong>Put</strong> 调用会将一个元素返回给 Pool ，Pool 将这个元素保存到池中，并且可以复用。但是如果 Put 一个 nil 值，Pool 则会忽略这个值。</p>
+<p><strong>内存泄漏</strong></p>
+<p>取出来的 bytes.Buffer 在使用的时候，我们可以在这个元素中增加大量的 byte 数据，这会导致底层的 byte slice 的容量可能会变得很大。即使 Reset 再放回到池子中，这些 byte slice 的容量不会改变，占据空间依然很大。又因为 Pool 回收机制，这些大的 Buffer 可能不被回收，进而一直占用很大的空间，这属于内存泄漏的问题。</p>
+<p><strong>内存浪费</strong></p>
+<p>池中的 buffer 都比较大，但是在实际使用的时候，很多时候只需要一个比较小的 buffer,这属于内存浪费。</p>
+<p>可以将 buffer 池分成几层。列如：小于512 byte的元素占一个池，小于1k byte 的元素占一个池。这样分成多个池以后，可以根据需要到所需大小的池中获取 buffer。</p>
+<h2 id="Context"><a href="#Context" class="headerlink" title="Context"></a>Context</h2><p>Context 接口包含四个方法：Deadline, Done ， Err 和 Value 。</p>
+<p><strong>Deadline</strong> 方法会返回这个 Context 被取消的截止日期。如果没有截止日期，ok的值是 false。后续每次调用这个对象的 Deadline 方法时，都会返回第一次调用相同的结果。</p>
+<p><strong>Done</strong> 方法返回一个 Channel 对象。在 Context 被取消时，此 Channel 会被 close，如果没有被取消，可能会返回nil 。后续的 Done 调用总是返回相同的结果。当 Done 被 close 的时候，你可以通过 ctx.Err 获取错误信息。</p>
+<p>如果 Done 没有被 close，Err 方法返回 nil。 如果Done 被 close ，Err方法会返回 Done 被 Close的原因。</p>
+<p><strong>Value</strong> 返回此 ctx 中和指定的 key 相关联的 value 。</p>
+<p>Context 中实现了两个生成顶层 Context 的方法： context.Background()  和 context.TODO() 。 这两个方法底层实现是一模一样的，用任意一个都可以。</p>
+<p>1.一般函数在使用Context 的时候，会把这个参数放在第一个参数的位置。</p>
+<p>2.从来不把 nil 当作 Context 类型的参数值，可以使用 context.Backgroud() 创建一个空的上下文对象，也不要使用nil。</p>
+<p>3.Context 只用来临时做函数之间的上下文透传，不能持久化 Context 或者把 Context 长期保存。把 Context 持久化到数据库，本地文件，全局变量，缓存等方式都是错误的用法。</p>
+<p>4.Key 的类型不应该是字符串类型或者其他内建类型，否则容易在包之间使用 Context 时产生冲突。使用 WithValue 时，Key 的类型应该是自己定义的类型。</p>
+<p>5.常常使用 struct{} 作为底层类型定义 key的类型。对于 exported key 的静态类型，常常是接口或者指针。这样可以金量减少内存分配。</p>
+<p>Context 常用来取消一个 goroutine 的运行。</p>
 
         </div>
 
