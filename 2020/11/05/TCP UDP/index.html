@@ -234,6 +234,13 @@
 <p>2.收到FIN分节的端会执行被动关闭，它会将一个文件结束符传递给接收端应用进程，这代表接收端应用程序在这个连接上再无额外数据可接收。</p>
 <p>3.一段时间后，这个服务端应用程序会关闭它的套接字。同时它的TCP会发送一个FIN分节。</p>
 <p>4.原发送端（执行主动关闭的那端）会确认这个FIN 分节。</p>
+<p><strong>TIMNE_WAIT 状态</strong></p>
+<p>TCP 每一个连接都会有一个默认的 MSL（maximum segment lifttime） 时间，这个时间最短为 <strong>30S</strong> , 最长则为 <strong>120S</strong>。MLS是任何IP数据报能在因特网存活的最长时间。</p>
+<p>我们可以假设：分组在网络中存在的时间不可能超过 MSL 秒。</p>
+<p>TIME_WAIT状态有两个存在的理由：</p>
+<p><strong>1.可靠地实现TCP全双工连接的终止。</strong></p>
+<p><strong>2.允许老的重复分节在网络中消逝。</strong></p>
+<p>TCP 必须防止来自某个连接 旧的重复分组在该连接已终止后再现，从而被误解成属于同一连接的某个新的化身。为了防止这一点，TCP 将不给处于 TIME_WAIT状态的连接发起新化身。<strong>TIME_WAIT 状态的持续时间为 MSL的两倍</strong>，这让某个方向上的分组最多存活MSL秒就被丢弃，而另外一方向的应答最多存活MSL秒也会被放弃，这足以让旧的重复分节消逝在网络中了。</p>
 <h2 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h2><p><strong>UDP 是一个简单，不稳定的传输协议。</strong></p>
 <p>它不保证数据报文会到达目的地，也不保证报文的发送顺序，也不保证报文只到达一次。</p>
 <blockquote>
