@@ -289,7 +289,13 @@
 <p>如果 chan 种还有数据，那么从这个 chan 接受数据时不会阻塞。如果 chan 没达到容量数，给它发送数据也不会阻塞，否则会阻塞。</p>
 <p><strong>unbuffered chan 只有读写都准备好之后才不会阻塞。</strong></p>
 <p><strong>nil 是 chan 的零值，是一种特殊的 chan，对值是 nil 的 chan 的发送节后调用者总是会阻塞。</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 发送数据到 chan</span><br><span class="line">ch &lt;- 100</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 接收数据</span><br><span class="line">x :&#x3D; &lt;-ch  &#x2F;&#x2F;变量接受数据</span><br><span class="line">a(&lt;-ch) &#x2F;&#x2F; 函数传参接受数据</span><br><span class="line">&lt;-ch    &#x2F;&#x2F;丢弃接受的数据</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 发送数据到 chan</span><br><span class="line">ch &lt;- 100</span><br><span class="line">&#x2F;&#x2F; 接收数据</span><br><span class="line">x :&#x3D; &lt;-ch  &#x2F;&#x2F;变量接受数据</span><br><span class="line">a(&lt;-ch) &#x2F;&#x2F; 函数传参接受数据</span><br><span class="line">&lt;-ch    &#x2F;&#x2F;丢弃接受的数据</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="使用反射操作-Channel"><a href="#使用反射操作-Channel" class="headerlink" title="使用反射操作 Channel"></a><strong>使用反射操作 Channel</strong></h2><p>在使用 Chan 时，我们有时无法确定它的数量，这样我们也没办法在编译前写成字面意义上的 select 。</p>
+<p>这个时候 我们需要 reflect.Select 函数，它可以将一组运行时的 case clause 传入，当作参数执行。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">func Select(cases []SelectCase) (chosen int, recv Value, recvOK bool)</span><br></pre></td></tr></table></figure>
 
 
         </div>
