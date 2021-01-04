@@ -14,7 +14,7 @@
 
 
 
-<title>Go内存模型 | 面向兴趣编程</title>
+<title>C语言指针 | 面向兴趣编程</title>
 
 
 
@@ -175,7 +175,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Go内存模型</h1>
+            <h1 class="post-title">C语言指针</h1>
             
                 <div class="post-meta">
                     
@@ -184,14 +184,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">十二月 1, 2020&nbsp;&nbsp;11:39:00</a>
+                        Date: <a href="#">十二月 31, 2020&nbsp;&nbsp;11:29:00</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/Go/">Go</a>
+                                <a href="/categories/C/">C</a>
                             
                         </span>
                     
@@ -200,14 +200,14 @@
         </header>
 
         <div class="post-content">
-            <h2 id="Go-内存模型"><a href="#Go-内存模型" class="headerlink" title="Go 内存模型"></a>Go 内存模型</h2><h3 id="happens-before"><a href="#happens-before" class="headerlink" title="happens - before"></a><strong>happens - before</strong></h3><p><strong>在一个 goroutine 内部，程序的执行顺序和它们的代码指定的顺序是一样的，即使编译器或CPU 重新排了读写顺序，也和代码指定的顺序一样。</strong></p>
-<p><strong>但是 Go 只保证 goroutine 内部重排对读写的顺序没有影响。</strong> 对于其他的 goroutine 重排会产生非常大的影响。</p>
-<p>Go 内存模型通过 happens-before 定义两个事件（读，写action）的顺序。</p>
-<p>1.Go 语言中，对变量进行零值的初始化就是一个写操作。</p>
-<p>2.如果对超过机器 word （64bit,32bit 或者其它）大小的值进行读写，那么就可以看作对拆成 word 大小的几个读写无序进行。</p>
-<p>3.Go 并不提供直接的 CPU 屏障（CPU fence）来提示编译器或CPU 保证顺序性，而是使用不同架构的内存屏障指令来实现统一的并发原语。</p>
-<p>​                                                                                                                                                                                                                                    </p>
-<p>​                                                                                                                                                                                                                            （TODO）</p>
+            <h2 id="C语言指针定义"><a href="#C语言指针定义" class="headerlink" title="C语言指针定义"></a>C语言指针定义</h2><h2 id="数组与指针"><a href="#数组与指针" class="headerlink" title="数组与指针"></a>数组与指针</h2><p>在C语言中特别要注意函数入参的指针调用</p>
+<p>假设 a 为一个数组，b 为一个函数，在C 语言中调用中会存在两种入参写法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">b(&amp;a[1])</span><br><span class="line"></span><br><span class="line">b(a+1)</span><br></pre></td></tr></table></figure>
+
+
+
+<p>如果 p 是以一个指向数组中某个元素的指针，那么 p++ 将对 p 进行自增运算并指向下一个元素，</p>
+<h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p>《C程序设计语言》</p>
 
         </div>
 
@@ -222,7 +222,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://ananonymousfriend.github.io/2020/12/01/Go%20%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">https://ananonymousfriend.github.io/2020/12/01/Go%20%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</a></span>
+                        <span><a href="https://ananonymousfriend.github.io/2020/12/31/C%E7%9A%84%E6%8C%87%E9%92%88/">https://ananonymousfriend.github.io/2020/12/31/C%E7%9A%84%E6%8C%87%E9%92%88/</a></span>
                     </p>
                 
                 
@@ -246,11 +246,11 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/Go/"># Go</a>
-                    
                         <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"># 学习笔记</a>
                     
-                        <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%EF%BC%8C%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/"># 并发编程，内存模型</a>
+                        <a href="/tags/C/"># C</a>
+                    
+                        <a href="/tags/%E6%8C%87%E9%92%88/"># 指针</a>
                     
                         
                 </span>
@@ -263,10 +263,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/12/01/Go%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/">Go并发编程——学习笔记</a>
             
-            
-            <a class="next" rel="next" href="/2020/11/05/TCP%20UDP/">TCP And UDP</a>
+            <a class="next" rel="next" href="/2020/12/09/%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F/">编程范式</a>
             
         </section>
 
