@@ -203,21 +203,19 @@
             <h2 id="C语言指针定义"><a href="#C语言指针定义" class="headerlink" title="C语言指针定义"></a>C语言指针定义</h2><p>C 语言中，指针一直都是一个核心部分，但是对于初学者来说，过于晦涩。</p>
 <p>例如指针的定义中 <strong>每个指针都必须指向某种特定的数据类型。（指向 void 类型的指针可以存防指向任何类型的指针，但是不能间接引用其中自身。*void 类似C# 的 object，或Go 中的 interface{}</strong>）。</p>
 <p>我们可以逐步拆解这几句话，再来了解它。“每个指针都必须指向某种特定的数据类型。”</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 声明一个 int 类型的变量</span><br><span class="line">int a &#x3D; 1;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 声明一个 int 类型的指针</span><br><span class="line">int *b;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 将 b 指向 a</span><br><span class="line">b &#x3D; &amp;a;</span><br><span class="line"></span><br><span class="line">*b 输出为 1</span><br><span class="line">b 输出为内存地址 </span><br></pre></td></tr></table></figure>
-
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/skGi5Q"><img src="https://s3.ax1x.com/2021/01/05/skGi5Q.png" alt="skGi5Q.png"></a></p>
 <p>C 语言中没有值类型和引用类型的区别，它用指针来控制。通过上述代码我们已经将指针 b 指向了 a，那么我们可以使用 *b 来代替使用变量a。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">*b &#x3D; *b + 1;</span><br><span class="line"></span><br><span class="line">*b 输出的值为 2</span><br><span class="line">a  输出的值为 2。</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="数组与指针"><a href="#数组与指针" class="headerlink" title="数组与指针"></a>数组与指针</h2><p>在C语言中特别要注意函数入参的指针调用</p>
-<p>假设 a 为一个数组，b 为一个函数，在C 语言中调用中会存在两种入参写法：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">b(&amp;a[1])</span><br><span class="line"></span><br><span class="line">b(a+1)</span><br></pre></td></tr></table></figure>
-
-
-
-<p>如果 p 是以一个指向数组中某个元素的指针，那么 p++ 将对 p 进行自增运算并指向下一个元素，</p>
-<h2 id="指向函数的指针"><a href="#指向函数的指针" class="headerlink" title="指向函数的指针"></a>指向函数的指针</h2><p><strong>C语言中，函数本身不是变量，但是可以定义指向函数的指针。</strong> 这种类型的指针可以被赋值，存放在数组中，传递给函数以及作为函数的返回值等。</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/skG3G9"><img src="https://s3.ax1x.com/2021/01/05/skG3G9.png" alt="skG3G9.png"></a></p>
+<blockquote>
+<p>C语言的指针在函数入参使用时，是传值的方式将参数传递给函数，所以不使用指针是无非影响到函数外部的变量。</p>
+<p>如果使用指针入参的方式传递，入参与指针共享某个变量的控制权。</p>
+</blockquote>
+<h2 id="数组与指针"><a href="#数组与指针" class="headerlink" title="数组与指针"></a>数组与指针</h2><p>在C语言中，指针和数组之间的关系十分密切。通过数组下标所能完成的任何操作都可以通过指针来完成。一般来说，用指针编写的程序比用数组下标编写的程序执行速度更快。</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/skGsxI"><img src="https://s3.ax1x.com/2021/01/05/skGsxI.png" alt="skGsxI.png"></a></p>
+<p>b 是一个指向数组 a 中第一个元素的指针，那么 b++ 将会对 b 进行自增运算，并指向下一个元素。C语言中的地址算术运算方法是一致且有规律的，指针配合数组和地址运算是C语言中的一大优点。</p>
+<p>有时我们可能看到这样的传参方式：</p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/skJKyt"><img src="https://s3.ax1x.com/2021/01/05/skJKyt.png" alt="skJKyt.png"></a></p>
+<p>这两种写法都可以将数组a[2] 元素传递给函数f，这两种写法都是合法的。但是要注意，第一种写法要掌握数组a的长度，以免数组越界。第二种写法个人不推荐，初次看到函数 f 容易对入参产生误判，要在函数声明头中确认入参的数据类型。</p>
 <h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p>《C程序设计语言》</p>
 
         </div>
