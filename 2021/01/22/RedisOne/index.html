@@ -14,7 +14,7 @@
 
 
 
-<title>Go内存模型 | 面向兴趣编程</title>
+<title>Redis 第一部分 | 面向兴趣编程</title>
 
 
 
@@ -175,7 +175,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Go内存模型</h1>
+            <h1 class="post-title">Redis 第一部分</h1>
             
                 <div class="post-meta">
                     
@@ -184,14 +184,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">一月 1, 2021&nbsp;&nbsp;15:27:00</a>
+                        Date: <a href="#">一月 22, 2021&nbsp;&nbsp;16:56:00</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/Go/">Go</a>
+                                <a href="/categories/Redis/">Redis</a>
                             
                         </span>
                     
@@ -200,14 +200,24 @@
         </header>
 
         <div class="post-content">
-            <h2 id="Go-内存模型"><a href="#Go-内存模型" class="headerlink" title="Go 内存模型"></a>Go 内存模型</h2><h3 id="happens-before"><a href="#happens-before" class="headerlink" title="happens - before"></a><strong>happens - before</strong></h3><p><strong>在一个 goroutine 内部，程序的执行顺序和它们的代码指定的顺序是一样的，即使编译器或CPU 重新排了读写顺序，也和代码指定的顺序一样。</strong></p>
-<p><strong>但是 Go 只保证 goroutine 内部重排对读写的顺序没有影响。</strong> 对于其他的 goroutine 重排会产生非常大的影响。</p>
-<p>Go 内存模型通过 happens-before 定义两个事件（读，写action）的顺序。</p>
-<p>1.Go 语言中，对变量进行零值的初始化就是一个写操作。</p>
-<p>2.如果对超过机器 word （64bit,32bit 或者其它）大小的值进行读写，那么就可以看作对拆成 word 大小的几个读写无序进行。</p>
-<p>3.Go 并不提供直接的 CPU 屏障（CPU fence）来提示编译器或CPU 保证顺序性，而是使用不同架构的内存屏障指令来实现统一的并发原语。</p>
-<p>​                                                                                                                                                                                                                                    </p>
-<p>​                                                                                                                                                                                                                            （TODO）</p>
+            <h2 id="Redis-第一部分-“数据结构与对象”"><a href="#Redis-第一部分-“数据结构与对象”" class="headerlink" title="Redis 第一部分 “数据结构与对象”"></a>Redis 第一部分 “数据结构与对象”</h2><h3 id="简单动态字符串"><a href="#简单动态字符串" class="headerlink" title="简单动态字符串"></a>简单动态字符串</h3><p>Redis 构建了一种名为 简单动态字符串（simple dynamic string，SDS）的抽象类型，并将 SDS用作 Redis 的默认字符串表示。</p>
+<p>如果Redis 在数据库中创建一个新的键值对，那么键值对的 键是一个字符串对象，对象的底层实现是一个保存着字符串的SDS。</p>
+<p>Reids这么做的原因有多个：</p>
+<p>1.C语言中字符串并不记录自身长度信息，照成程序必须遍历整个字符串。SDS 在 len 属性中记录了它本身的长度，这使Reids 获取字符串长度所需的复杂度从 O(N) 降到了 O(1)，确保获取字符串不会成为Redis 的性能瓶颈。</p>
+<p>2.C字符串不记录自身长度带来另外一个问题就是<strong>容易造成缓冲区溢出</strong>。SDS 的空间分配策略完全杜绝了发生缓冲区溢出的可能性：对SDS进行修改时，API会先检查 SDS 的空间是否满足修改所需的要求，如果不满足，API会自动修改所需的大小。</p>
+<p>3.C字符串的底层总是一个N+1个字符长的数组，所以每次增长或缩短一个C字符串，程序都要对保存这个C字符串的数组进行一次内存重分配操作。</p>
+<p>4.C字符串中的字符必须符合某种编码，处理字符串的末尾之外，字符串不能包含空字符串。这些限制使C字符串只能保存文本数据，而不能保存图片，音频，视频这样的二进制数据。<strong>SDS 的 API 都是二进制安全的。所以Redis 不仅可以保存文本数据，还可以保存任意格式的二进制数据。</strong></p>
+<p>5.SDS 兼容部分 C 字符串函数，虽然 SDS的API 是二进制安全的，但是它依旧遵循 C 字符串以空字符串结尾的惯例。这是为了重用&lt;string.h&gt;/strcasecmp 函数，这样 Redis 会避免部分的函数重写。</p>
+<h3 id="链表"><a href="#链表" class="headerlink" title="链表"></a>链表</h3><p>链表提供了高效的节点重排能力，以及顺序性的节点访问方式，并且可以通过增删节点来灵活地调整链表的长度。</p>
+<p>因为 Redis 使用 C语言编写，但又因为 C 语言并没有内置这种数据结构，所以Redis 自己实现链表。</p>
+<p>1.Redis 是一个双向链表，但是无环，表头的 prev 和 表尾的 next 指向 NULL。</p>
+<p>2.Redis 的链表包含表头指针和表尾指针，可以将获取头尾节点复杂度降低为 O(1)</p>
+<p>3.Redis链表包含长度计数器，可以使用 list 结构的 len 属性对持有的链表节点进行计数，复杂度为O(1)</p>
+<p>4.Redis 链表使用 void* 指针来保存节点值，所以链表可以用于保存各种不同类型的值。</p>
+<h2 id="字典"><a href="#字典" class="headerlink" title="字典"></a>字典</h2><p>在字典中，一个键（key）可以和一个值（value）进行关联，这些关联的键和值称之为键值对。</p>
+<p>字典在 Redis 中应用相当广泛，比如Redis 的数据库就是使用字典来作为底层实现的，对数据库的操作都是基于对字典的操作之上。</p>
+<p>字典还是哈希键的底层实现之一，当一个哈希键包含的键值对比较多，又或者键值对中的元素都是比较长的字符串时，Redis 就会使用字典作为哈希键的底层实现。</p>
+<h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p>《Redis 设计与实现》</p>
 
         </div>
 
@@ -222,7 +232,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://ananonymousfriend.github.io/2021/01/01/Go%20%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">https://ananonymousfriend.github.io/2021/01/01/Go%20%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/</a></span>
+                        <span><a href="https://ananonymousfriend.github.io/2021/01/22/RedisOne/">https://ananonymousfriend.github.io/2021/01/22/RedisOne/</a></span>
                     </p>
                 
                 
@@ -246,11 +256,11 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/Go/"># Go</a>
-                    
                         <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"># 学习笔记</a>
                     
-                        <a href="/tags/%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%EF%BC%8C%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/"># 并发编程，内存模型</a>
+                        <a href="/tags/Redis/"># Redis</a>
+                    
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/"># 数据结构</a>
                     
                         
                 </span>
@@ -263,10 +273,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2021/01/22/RedisOne/">Redis 第一部分</a>
             
-            
-            <a class="next" rel="next" href="/2020/12/31/C%E7%9A%84%E6%8C%87%E9%92%88/">C语言指针</a>
+            <a class="next" rel="next" href="/2021/01/01/Go%20%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">Go内存模型</a>
             
         </section>
 
