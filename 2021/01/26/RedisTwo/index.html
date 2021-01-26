@@ -184,7 +184,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">一月 22, 2021&nbsp;&nbsp;16:56:00</a>
+                        Date: <a href="#">一月 26, 2021&nbsp;&nbsp;18:11:00</a>
                         </span>
                     
                     
@@ -216,6 +216,14 @@
 <p>如果服务器在读取一个键时发现已经过期，那么服务器会先删除这个过期键，然后再执行余下的其他操作。</p>
 <p>客户端使用 WATCH 命令监视了某个键，那么服务器再对被监视的键进行修改过后，这个键会被标记 dirty，这是为了让事务程序注意到这个键已经被修改过。</p>
 <p>服务器每修改一个键，都会对 dirty 键计数器的值增1，这个计数器会触发服务器的持久化及复制操作。</p>
+<p><strong>设置键的生存时间或过期时间</strong></p>
+<p>通过EXPIRE 或者 PEXPIRE 命令，客户端可以以秒或者毫秒精度为数据库中的某个键设置生存时间，服务器会自动删除生存时间为 0 的键。</p>
+<blockquote>
+<p>SETEX命令设置过期时间和 EXPIRE命令设置过期时间的原理是完全一样的。</p>
+</blockquote>
+<p><strong>EXPIRE 命令用于将键 key 的生存时间设置为 ttl 秒。</strong></p>
+<p><strong>PEXPIRE 命令用于将键 key 的生存时间设置为 ttl 毫秒。</strong></p>
+<p>TTL 命令和 PTTL 命令可以查看一个键的剩余生存时间。</p>
 <h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p>《Redis 设计与实现》</p>
 
         </div>
@@ -231,7 +239,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://ananonymousfriend.github.io/2021/01/22/RedisTwo/">https://ananonymousfriend.github.io/2021/01/22/RedisTwo/</a></span>
+                        <span><a href="https://ananonymousfriend.github.io/2021/01/26/RedisTwo/">https://ananonymousfriend.github.io/2021/01/26/RedisTwo/</a></span>
                     </p>
                 
                 
@@ -272,10 +280,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2021/01/22/RedisOne/">Redis 第一部分</a>
             
-            
-            <a class="next" rel="next" href="/2021/01/01/Go%20%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">Go内存模型</a>
+            <a class="next" rel="next" href="/2021/01/22/RedisOne/">Redis 第一部分</a>
             
         </section>
 
