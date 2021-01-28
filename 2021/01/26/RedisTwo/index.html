@@ -235,6 +235,13 @@
 <p>如果执行的太少，或者执行时间太短，那么就会出现内存浪费的情况。</p>
 </blockquote>
 <p>服务器必须根据自身情况，合理设置删除操作的执行时长和执行频率。</p>
+<h4 id="数据库通知"><a href="#数据库通知" class="headerlink" title="数据库通知"></a>数据库通知</h4><p>数据库通知同能可以让客户端通过订阅给定的频道或模式，来获知数据库中键的边华，以及数据库中命令的执行情况。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">服务器配置的 notify-keyspace-events 选项决定了发送通知的类型：</span><br><span class="line">服务器发送所有类型的键空间通知和键事件通知，设置为 AKE</span><br><span class="line">服务器发送所有类型的键空间通知，设置为 AK</span><br><span class="line">服务器发送所有类型的键事件通知，设置为 AE</span><br><span class="line">服务器只发送和字符串键有关的键空间通知，设置为 K$</span><br><span class="line">服务器只发送和列表键有关的键事件通知，设置为 E1</span><br></pre></td></tr></table></figure>
+
+
+
+
+
 <h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p>《Redis 设计与实现》</p>
 
         </div>
