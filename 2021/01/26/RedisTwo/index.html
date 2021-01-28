@@ -240,6 +240,25 @@
 
 
 
+<h3 id="RDB-持久化"><a href="#RDB-持久化" class="headerlink" title="RDB 持久化"></a>RDB 持久化</h3><p>因为Redis 是内存数据库，它的数据是存在内存里面的。但是Redis 也提供 RDB 持久化功能，它可以将数据库状态保存到磁盘中，避免数据意外丢失。</p>
+<p>RDB 持久化既可以手动执行，也可以根据服务器配置选项定期执行，它能将某个时间点上的数据库状态保存到一个 RDB 文件中。</p>
+<p><strong>RDB 是一个经过压缩的二进制文件。</strong></p>
+<h5 id="RDB-文件的创建与载入"><a href="#RDB-文件的创建与载入" class="headerlink" title="RDB 文件的创建与载入"></a>RDB 文件的创建与载入</h5><p>两个命令可以可以用于生成 RDB 文件: SAVE , BGSAVE</p>
+<p>SAVE命令会阻塞 Redis 服务器进程，直到 RDB 文件创建完毕为止，阻塞期间服务器不能处理任何命令请求。</p>
+<p>BGSAVE 会派生出一个子进程，然后由子进程创建 RDB 文件，服务器主进程进程继续处理请求。</p>
+<p>*<em>RDB文件的载入工作是在服务器启动时自动执行的，所以只要 Redis 服务器在启动时检测到 RDB 文件存在，它就会自动载入 RDB 文件。 *</em></p>
+<blockquote>
+<p>因为AOF 文件的更新频率通常比 RDB 文件的更新频率更高，所以如果服务器开启了 AOF 持久化，那么服务器会优先使用 AOF 文件来还原数据库状态。</p>
+<p>只有在 AOF 关闭时，服务器才会使用 RDB 文件来还原数据库。</p>
+</blockquote>
+<p>RDB 文件在载入时是一个单一的过程，在执行了 BGSAVE 命令后，无论是再向服务器发送 SAVA 命令或 BASAVE 命令，Redis 都会拒绝。</p>
+<p>但是如果 BGSAVE 命令正在执行，BGREWRITEAOF 命令会被延迟到 BGSAVE 命令执行完毕之后执行。</p>
+<p>如果 BGREWRITEAOF 命令正在执行，发送 BGSAVE 命令会被拒绝。</p>
+<h5 id="自动间隔性保存"><a href="#自动间隔性保存" class="headerlink" title="自动间隔性保存"></a>自动间隔性保存</h5><p>Redis 允许用户通过设置服务器配置的 sava 选项，让服务器每隔一段时间就执行一次 BGSAVE 命令。同时，用户也可以设置多个保存条件，只要启动任意一个条件被满足，服务器就会执行 BGSAVE 命令。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sava 999 1      #服务器在900秒内，对数据库进行了至少一次修改。</span><br><span class="line">save 300 10        #服务器在300秒内，对数据库进行了至少十次修改。</span><br><span class="line">save 60 10000    #服务器在60秒内，对数据库进行了至少一万次修改。</span><br></pre></td></tr></table></figure>
+
+
+
 
 
 <h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p>《Redis 设计与实现》</p>
