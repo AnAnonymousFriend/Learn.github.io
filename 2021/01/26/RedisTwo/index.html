@@ -259,8 +259,27 @@
 
 
 
+<h3 id="AOF-持久化"><a href="#AOF-持久化" class="headerlink" title="AOF 持久化"></a>AOF 持久化</h3><p>与 RDB 持久化通过保存数据库中的键值对来记录数据库状态不同，AOF 持久化是通过保存 Redis 服务器所执行的写命令来记录数据库状态。</p>
+<p>AOF 持久化功能可以分为三个步骤：</p>
+<h4 id="命令追加"><a href="#命令追加" class="headerlink" title="命令追加"></a><strong>命令追加</strong></h4><p>AOF 持久化功能处于打开状态时，服务器在执行完一个命令之后，会以协议格式将被执行的写命令追加到服务器状态的 aof_buf 缓冲区的末尾</p>
+<p>写入与同步</p>
+<p>服务器在处理文件事件时，可能会执行写命令，每次结束一个事件循环之前，服务器会考虑是否将 aof_buf 缓冲区中的内容写入和保存到 AOF 文件里面。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">always      将 aof_buf 缓冲区中的所有内容写入并同步到AOF文件</span><br><span class="line">everysec     将 aof_buf 缓冲区中的所有内容写入并同步到AOF文件，如果上次同步 AOF 文件的事件距离限制超过一秒，那么再次对 AOF 文件进行同步，这个同步操作会另起一个线程专门负责执行。</span><br><span class="line">no             将 aof_buf 缓冲区中的所有内容写入并同步到AOF文件,但是不对 AOF 文件进行同步，由操作系统来决定什么时候同步。</span><br></pre></td></tr></table></figure>
 
-
+<p>如果没有设置选项，默认是 everysec。</p>
+<blockquote>
+<p>服务器配置 appendfsync 选项的值直接决定 AOF 持久化功能的效率和安全性。</p>
+<p>always 的效率是最慢的一个，但是最安全，即使出现故障停机，AOF 持久化也只会丢失一个事件循环中所产生的命令数据。</p>
+<p>everysec 模式足够快，并且就算出现故障停机，数据库也只丢失一秒钟的命令数据。</p>
+<p>no 模式下 AOF 文件写入速度总是最快的，但是同步时长最长。当出现故障停机时，会丢失上次同步 AOF 文件之后的所有写命令数据。</p>
+</blockquote>
+<h4 id="文件载入与数据还原"><a href="#文件载入与数据还原" class="headerlink" title="文件载入与数据还原"></a>文件载入与数据还原</h4><p>因为 AOF 文件里面包含了重建数据库状态所有写命令，所以服务器只要读取文件并重写执行一遍 AOF 文件里面保存的写命令，就可以还原服务器关闭之前的数据库状态。</p>
+<p>Redis 读取 AOF 并还原数据库状态步骤：</p>
+<p>1.创建一个不带网络连接的伪客户端，因为 Redis 的命令只能在客户端上下文中执行，所以需要服务器使用一个没有网络连接的伪客户端执行 AOF 的写命令。</p>
+<p>2.从 AOF 读取一条写命令</p>
+<p>3.使用伪客户端执行这条写命令</p>
+<p>4.重复2和3步，直到所有命令执行完毕</p>
+<h4 id="AOF-重写"><a href="#AOF-重写" class="headerlink" title="AOF 重写"></a>AOF 重写</h4><p>随着时间流逝，AOF的文件会越来越大，为了解决这一问题，Redis 提供了 AOF 重写功能。通过重写，Redis 服务器可以创建一个新的 AOF 文件来替代现有的 AOF 文件，新旧两个 AOF 文件所保存的数据库状态相同，但是新 AOF 文件的体积通常比旧文件体积要小得多。</p>
 <h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p>《Redis 设计与实现》</p>
 
         </div>
