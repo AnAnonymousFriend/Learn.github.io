@@ -14,7 +14,7 @@
 
 
 
-<title>Redis 复制 | 面向兴趣编程</title>
+<title>Kubernetes 术语解释 | 面向兴趣编程</title>
 
 
 
@@ -175,7 +175,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Redis 复制</h1>
+            <h1 class="post-title">Kubernetes 术语解释</h1>
             
                 <div class="post-meta">
                     
@@ -184,14 +184,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">二月 10, 2021&nbsp;&nbsp;18:11:00</a>
+                        Date: <a href="#">六月 29, 2021&nbsp;&nbsp;15:22:00</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/categories/Redis/">Redis</a>
+                                <a href="/categories/Kubernetes/">Kubernetes</a>
                             
                         </span>
                     
@@ -200,40 +200,28 @@
         </header>
 
         <div class="post-content">
-            <h2 id="Redis-复制"><a href="#Redis-复制" class="headerlink" title="Redis 复制"></a>Redis 复制</h2><p>Redis 中可以通过执行 <strong>SLAVEOF 命令或设置 slaveof 选项，让一个服务器去复制另外一个服务器。</strong></p>
-<p>Redis 的复制分为同步和命令传播两个操作：</p>
-<p>同步操作用于将<strong>从库</strong>数据状态更新至<strong>主库数据库状态。</strong></p>
-<p>命令传播操作用于 主库被修改时，让主从数据库状态保持一致。</p>
-<h2 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h2><p>1.从库向主库发送 SYNC命令。</p>
-<p>2.受到SYNC命令的主库执行 BGSAVE命令，后台生成一个 RDB文件，并使用缓冲区记录从现在开始执行的所有写命令。</p>
-<p>3.主库 BGSAVE 命令执行完毕时，从库会将RDB文件发送给从库，从库载入 RDB文件，将自己的数据库状态更新至主库执行BGSAVE命令时的状态。</p>
-<p>4.主库将记录在缓冲区里面所有写命令发送给从库，从库执行这些命令，将自己的数据库状态更新至主库当前所处的状态。</p>
-<p><strong>SYNC命令是一个非常消耗资源的操作。无论是生成RDB文件所消耗的内存，I/O，还是将RDB文件发送给从库所占用的网络资源，都会对主从库产生较大的影响（从库载入RDB文件时是阻塞的，无法处理命令请求）。</strong></p>
-<p><strong>PSYNC 命令代替SYNC命令来执行复制的同步操作。</strong>PSYNC命令分为两部分：</p>
-<p><strong>完整同步：</strong>与SYNC命令执行步骤一样。</p>
-<p><strong>部分同步：</strong>专用于处理断线后复制。当从服务器断线后重新连接主服务器，如果条件允许，主服务器可以将从服务器断线期间所执行的写命令发送给从服务器，从服务器接受这些命令并执行就可以更新至主服务器当前状态。</p>
-<p><strong>部分同步三部分：</strong></p>
-<p><strong>复制偏移量</strong></p>
-<p>主服务器和从服务器都会存有一个复制偏移量。当主服务器向从服务器发送字节数据或从服务器接收到主服务器的字节数据时，就会改写这个偏移量。</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/gQ6UXR"><img src="https://z3.ax1x.com/2021/05/06/gQ6UXR.png" alt="gQ6UXR.png"></a><a target="_blank" rel="noopener" href="https://imgtu.com/i/gQ6DAK"><img src="https://z3.ax1x.com/2021/05/06/gQ6DAK.png" alt="gQ6DAK.png"></a></p>
-<p>如上图</p>
-<p>主库和从库最开始维护的复制偏移位为1000，当主库向从库传输字节数据时，无论是主库还是从库，都会去改写复制偏移位，将1000 + 20字节，改写为1020。</p>
-<p>​                                                  <a target="_blank" rel="noopener" href="https://imgtu.com/i/gQ6gcd"><img src="https://z3.ax1x.com/2021/05/06/gQ6gcd.png" alt="gQ6gcd.png"></a></p>
-<p>如果从服务器处于断线状态，则无法维护复制偏移位。通过复制偏移量可以很容易就知道主从库数据状态是否保持一致。</p>
-<p><strong>主服务的复制积压缓冲区</strong></p>
-<p>复制积压缓冲区是由主服务器维护的一个固定长度先进先出的队列，默认大小为1MB。</p>
-<p>当主库进行命令传播时，它不仅会将写命令发送给所有从库，还会将写命令入队到复制积压缓冲区里面。</p>
-<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/gQcQvd"><img src="https://z3.ax1x.com/2021/05/06/gQcQvd.png" alt="gQcQvd.png"></a></p>
-<p>当断线的服务器A重新连接主服务器时候，它会主动报告自己的复制偏移位 1020，主服务器会立马查询偏移位1020之后的数据是否存在复制积压缓冲区中，如果存在则以部分重同步模式进行后续操作，如果不存在则以完整重同步操作。</p>
-<p>复制积压缓冲区的最小大小可根据公式 second * write_size_per_second 来进行估算，即：</p>
-<p><strong>2 * 从服务器断线后重新连接主服务器所需的平均时间 * 主服务器平均每秒产生的写命令数据量。</strong></p>
-<p><strong>服务器的运行ID</strong></p>
-<p>每个服务器都拥有一个运行ID，这个ID在服务启动时自动生成，由40个随机的十六进制字符组成。</p>
-<p>当从库对主库初次复制时，主库会将自己的运行ID发送给从库，从库会保存这个ID。当从库断线后重新连接时，从库会向当前连接的主库发送保存的ID。</p>
-<p>如果当前连接的主库ID与保存的ID相同，说明主库没有发生改变，可以继续尝试执行部分同步操作。</p>
-<p>如果当前连接的主库ID与保存的ID不相同，说明主库发生更换，那么直接进行完整重同步操作。</p>
-<h2 id="命令传播"><a href="#命令传播" class="headerlink" title="命令传播"></a>命令传播</h2><p>主库会将自己执行的写命令，发送给从库执行。这个行为称为命令传播。</p>
-<h2 id="学习资料"><a href="#学习资料" class="headerlink" title="学习资料"></a>学习资料</h2><p>《Redis 设计与实现》</p>
+            <h2 id="什么是-Kubernetes"><a href="#什么是-Kubernetes" class="headerlink" title="什么是 Kubernetes"></a><strong>什么是 Kubernetes</strong></h2><p>Kubernetes是一个自动化的容器编排平台，它负责应用的部署，应用的弹性以及应用的管理，这些都是基于容器的。</p>
+<h1 id="2-Kubernetes-有如下几个核心的功能："><a href="#2-Kubernetes-有如下几个核心的功能：" class="headerlink" title="2.Kubernetes 有如下几个核心的功能："></a><strong>2.Kubernetes 有如下几个核心的功能：</strong></h1><p>服务的发现与负载均衡</p>
+<p>容器的“调度”，把一个容器放到一个集群的某一台机器上，K8s帮助我们去做存储的编排，让存储的声明周期与容器的生命周期能有一个连接。</p>
+<p>k8s 会对容器做自动化的恢复，如果在一个集群中，经常出现宿主机的问题，导致容器不可用，K8s会自动对不可用的容器进行恢复。</p>
+<p>k8S 会帮助我们去做应用的自动发布和回滚，以及与应用相关的配置密文的管理。</p>
+<p>批量执行Job类型任务</p>
+<p>支持水平的伸缩</p>
+<h1 id="核心讲解"><a href="#核心讲解" class="headerlink" title="核心讲解"></a><strong>核心讲解</strong></h1><p><strong>调度</strong></p>
+<p>K8s 可以将用户提交的容器放到管理的集群中的某一台节点上去。“调度”是执行这项功能的组件，同时它会观察正在被调度的容器的大小，规格。</p>
+<p><strong>自动修复</strong></p>
+<p>K8s有一个节点健康检查的功能，它会检测集群中的所有宿主机，当宿主机本身出现故障时，或者某个软件出现故障时，这个节点健康检查会自动对它进行发现</p>
+<p><strong>水平伸缩</strong></p>
+<p>K8s 有业务负载检查的能力，它会监测业务上所承担的负载，如果这个业务本身的CPU利用率过高，或者响应时间过长，它可以对这个业务进行一次扩容。</p>
+<h1 id="术语讲解"><a href="#术语讲解" class="headerlink" title="术语讲解"></a>术语讲解</h1><h3 id="Cluster"><a href="#Cluster" class="headerlink" title="Cluster"></a>Cluster</h3><p>Cluster 是计算，存储和网络资源的集合，Kubernetes 利用这些资源运行各种基于容器的应用。</p>
+<h3 id="Master"><a href="#Master" class="headerlink" title="Master"></a>Master</h3><p>Master 主要职责是调度，决定将应用放在那里运行。Master 运行Linux 操作系统，可以是物理机或者虚拟机。为了实现高可用，可以运行多个 Master。</p>
+<h3 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h3><p>Node 的职责是运行容器应用。Node 由 Master 管理，Node 负责监控并汇报容器的状态，同时根据 Master 的要求管理容器的生命。Node 运行在 Linux 操作系统上，可以是物理机或是虚拟机。</p>
+<h3 id="Pod"><a href="#Pod" class="headerlink" title="Pod"></a>Pod</h3><p><strong>Pod 是 Kubernetes 调度的最小单位，容器的集合，一组紧密相关的容器放在一个Pod中，同一个Pod 中的所有容器共享IP地址和 Port空间，他们在一个 network namespace 中。同一Pod中的容器始终被一起调度。</strong></p>
+<h3 id="Controller"><a href="#Controller" class="headerlink" title="Controller"></a>Controller</h3><p>Kubernetes 提供多种 Controller 来管理 Pod ，包括 Deployment，ReplicaSet，DaemonSet，StatefuleSet，Job等。</p>
+<p><strong>Deployment：可以理解为应用。</strong></p>
+<h3 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h3><p>Kubernetes Service 定义了外界访问一组特定的 Pod 的方式。Service 有自己的 IP 和端口，Service 为 Pod 提供了负载均衡。</p>
+<p><strong>Kubernetes 运行容器（Pod）与访问容器 （Pod）这两项任务分别由 Controller 和 Service 执行。</strong></p>
+<h3 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h3><p>Namespace 可以将一个物理的 Cluster 逻辑上划分成多个虚拟 Cluster，每个 Cluster 就是一个 Namespace。不同 Namespace 里的资源是完全隔离的。</p>
 
         </div>
 
@@ -248,7 +236,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://ananonymousfriend.github.io/2021/02/10/RedisCopy/">https://ananonymousfriend.github.io/2021/02/10/RedisCopy/</a></span>
+                        <span><a href="https://ananonymousfriend.github.io/2021/06/29/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/">https://ananonymousfriend.github.io/2021/06/29/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/</a></span>
                     </p>
                 
                 
@@ -274,9 +262,7 @@
                     
                         <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"># 学习笔记</a>
                     
-                        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"># 分布式</a>
-                    
-                        <a href="/tags/Redis/"># Redis</a>
+                        <a href="/tags/Kubernetes/"># Kubernetes</a>
                     
                         
                 </span>
@@ -289,10 +275,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2021/06/29/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/">Kubernetes 术语解释</a>
             
-            
-            <a class="next" rel="next" href="/2021/01/26/RedisTwo/">Redis 第二部分</a>
+            <a class="next" rel="next" href="/2021/02/10/RedisCopy/">Redis 复制</a>
             
         </section>
 
