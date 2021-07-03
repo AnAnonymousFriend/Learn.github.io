@@ -14,7 +14,7 @@
 
 
 
-<title>Kubernetes 术语解释 | 面向兴趣编程</title>
+<title>Kubernetes 安装 | 面向兴趣编程</title>
 
 
 
@@ -175,7 +175,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Kubernetes 术语解释</h1>
+            <h1 class="post-title">Kubernetes 安装</h1>
             
                 <div class="post-meta">
                     
@@ -200,28 +200,28 @@
         </header>
 
         <div class="post-content">
-            <h2 id="什么是-Kubernetes"><a href="#什么是-Kubernetes" class="headerlink" title="什么是 Kubernetes"></a><strong>什么是 Kubernetes</strong></h2><p>Kubernetes是一个自动化的容器编排平台，它负责应用的部署，应用的弹性以及应用的管理，这些都是基于容器的。</p>
-<h1 id="2-Kubernetes-有如下几个核心的功能："><a href="#2-Kubernetes-有如下几个核心的功能：" class="headerlink" title="2.Kubernetes 有如下几个核心的功能："></a><strong>2.Kubernetes 有如下几个核心的功能：</strong></h1><p>服务的发现与负载均衡</p>
-<p>容器的“调度”，把一个容器放到一个集群的某一台机器上，K8s帮助我们去做存储的编排，让存储的声明周期与容器的生命周期能有一个连接。</p>
-<p>k8s 会对容器做自动化的恢复，如果在一个集群中，经常出现宿主机的问题，导致容器不可用，K8s会自动对不可用的容器进行恢复。</p>
-<p>k8S 会帮助我们去做应用的自动发布和回滚，以及与应用相关的配置密文的管理。</p>
-<p>批量执行Job类型任务</p>
-<p>支持水平的伸缩</p>
-<h1 id="核心讲解"><a href="#核心讲解" class="headerlink" title="核心讲解"></a><strong>核心讲解</strong></h1><p><strong>调度</strong></p>
-<p>K8s 可以将用户提交的容器放到管理的集群中的某一台节点上去。“调度”是执行这项功能的组件，同时它会观察正在被调度的容器的大小，规格。</p>
-<p><strong>自动修复</strong></p>
-<p>K8s有一个节点健康检查的功能，它会检测集群中的所有宿主机，当宿主机本身出现故障时，或者某个软件出现故障时，这个节点健康检查会自动对它进行发现</p>
-<p><strong>水平伸缩</strong></p>
-<p>K8s 有业务负载检查的能力，它会监测业务上所承担的负载，如果这个业务本身的CPU利用率过高，或者响应时间过长，它可以对这个业务进行一次扩容。</p>
-<h1 id="术语讲解"><a href="#术语讲解" class="headerlink" title="术语讲解"></a>术语讲解</h1><h3 id="Cluster"><a href="#Cluster" class="headerlink" title="Cluster"></a>Cluster</h3><p>Cluster 是计算，存储和网络资源的集合，Kubernetes 利用这些资源运行各种基于容器的应用。</p>
-<h3 id="Master"><a href="#Master" class="headerlink" title="Master"></a>Master</h3><p>Master 主要职责是调度，决定将应用放在那里运行。Master 运行Linux 操作系统，可以是物理机或者虚拟机。为了实现高可用，可以运行多个 Master。</p>
-<h3 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h3><p>Node 的职责是运行容器应用。Node 由 Master 管理，Node 负责监控并汇报容器的状态，同时根据 Master 的要求管理容器的生命。Node 运行在 Linux 操作系统上，可以是物理机或是虚拟机。</p>
-<h3 id="Pod"><a href="#Pod" class="headerlink" title="Pod"></a>Pod</h3><p><strong>Pod 是 Kubernetes 调度的最小单位，容器的集合，一组紧密相关的容器放在一个Pod中，同一个Pod 中的所有容器共享IP地址和 Port空间，他们在一个 network namespace 中。同一Pod中的容器始终被一起调度。</strong></p>
-<h3 id="Controller"><a href="#Controller" class="headerlink" title="Controller"></a>Controller</h3><p>Kubernetes 提供多种 Controller 来管理 Pod ，包括 Deployment，ReplicaSet，DaemonSet，StatefuleSet，Job等。</p>
-<p><strong>Deployment：可以理解为应用。</strong></p>
-<h3 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h3><p>Kubernetes Service 定义了外界访问一组特定的 Pod 的方式。Service 有自己的 IP 和端口，Service 为 Pod 提供了负载均衡。</p>
-<p><strong>Kubernetes 运行容器（Pod）与访问容器 （Pod）这两项任务分别由 Controller 和 Service 执行。</strong></p>
-<h3 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h3><p>Namespace 可以将一个物理的 Cluster 逻辑上划分成多个虚拟 Cluster，每个 Cluster 就是一个 Namespace。不同 Namespace 里的资源是完全隔离的。</p>
+            <h2 id="Docker-安装"><a href="#Docker-安装" class="headerlink" title="Docker 安装"></a>Docker 安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install docker.io</span><br></pre></td></tr></table></figure>
+
+<h2 id="K8s-安装"><a href="#K8s-安装" class="headerlink" title="K8s 安装"></a>K8s 安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使得 apt 支持 ssl 传输</span></span><br><span class="line">apt-get update &amp;&amp; apt-get install -y apt-transport-https</span><br><span class="line"><span class="comment"># 下载 gpg 密钥</span></span><br><span class="line">curl &lt;https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg&gt; | apt-key add - </span><br><span class="line"><span class="comment"># 添加 k8s 镜像源</span></span><br><span class="line">cat &lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.list</span><br><span class="line">deb &lt;https://mirrors.aliyun.com/kubernetes/apt/&gt; kubernetes-xenial main</span><br><span class="line">EOF</span><br><span class="line"><span class="comment"># 更新源列表</span></span><br><span class="line">apt-get update</span><br><span class="line"><span class="comment"># 下载 kubectl，kubeadm以及 kubelet</span></span><br><span class="line">apt-get install -y kubelet kubeadm kubectl</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="关闭Swap"><a href="#关闭Swap" class="headerlink" title="关闭Swap"></a>关闭Swap</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">swapoff -a</span><br><span class="line">sed -ri `s/.*swap.*<span class="comment">#&amp;/` /etc/fstab</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Kubeadm-使用阿里云拉取需要的镜像"><a href="#Kubeadm-使用阿里云拉取需要的镜像" class="headerlink" title="Kubeadm 使用阿里云拉取需要的镜像"></a>Kubeadm 使用阿里云拉取需要的镜像</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm config images pull --image-repository=registry.aliyuncs.com/goole_containers</span><br></pre></td></tr></table></figure>
+
+<p>PS:这里拉取 coredns 会有问题，所以直接拉取官方的镜像。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull coredns/coredns:1.8.0</span><br></pre></td></tr></table></figure>
+
+<p>然后修改镜像的tag</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo docker tag 296a6d5035e2 registry.aliyuncs.com/google_containers/coredns/coredns:V1.8.0</span><br></pre></td></tr></table></figure>
+
+<p>先查看 kubeadm 需要的镜像</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm config images list</span><br></pre></td></tr></table></figure>
+
+<p><strong>PS：可以先从阿里云等国内源拉取需要的镜像，然后更改Tag。</strong></p>
 
         </div>
 
@@ -236,7 +236,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://ananonymousfriend.github.io/2021/06/29/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/">https://ananonymousfriend.github.io/2021/06/29/%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B/</a></span>
+                        <span><a href="https://ananonymousfriend.github.io/2021/06/29/Kubernetes%20%E9%83%A8%E7%BD%B2/">https://ananonymousfriend.github.io/2021/06/29/Kubernetes%20%E9%83%A8%E7%BD%B2/</a></span>
                     </p>
                 
                 
@@ -274,6 +274,8 @@
             </div>
         </section>
         <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2021/06/29/Kubernetes%20%E6%9C%AF%E8%AF%AD%E8%A7%A3%E9%87%8A/">Kubernetes 术语解释</a>
             
             
             <a class="next" rel="next" href="/2021/02/10/RedisCopy/">Redis 复制</a>
