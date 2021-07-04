@@ -202,11 +202,13 @@
         <div class="post-content">
             <h2 id="Docker-安装"><a href="#Docker-安装" class="headerlink" title="Docker 安装"></a>Docker 安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install docker.io</span><br></pre></td></tr></table></figure>
 
+
+
 <h2 id="K8s-安装"><a href="#K8s-安装" class="headerlink" title="K8s 安装"></a>K8s 安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使得 apt 支持 ssl 传输</span></span><br><span class="line">apt-get update &amp;&amp; apt-get install -y apt-transport-https</span><br><span class="line"><span class="comment"># 下载 gpg 密钥</span></span><br><span class="line">curl &lt;https://mirrors.aliyun.com/kubernetes/apt/doc/apt-key.gpg&gt; | apt-key add - </span><br><span class="line"><span class="comment"># 添加 k8s 镜像源</span></span><br><span class="line">cat &lt;&lt;EOF &gt;/etc/apt/sources.list.d/kubernetes.list</span><br><span class="line">deb &lt;https://mirrors.aliyun.com/kubernetes/apt/&gt; kubernetes-xenial main</span><br><span class="line">EOF</span><br><span class="line"><span class="comment"># 更新源列表</span></span><br><span class="line">apt-get update</span><br><span class="line"><span class="comment"># 下载 kubectl，kubeadm以及 kubelet</span></span><br><span class="line">apt-get install -y kubelet kubeadm kubectl</span><br></pre></td></tr></table></figure>
 
 
 
-<h2 id="关闭Swap"><a href="#关闭Swap" class="headerlink" title="关闭Swap"></a>关闭Swap</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">swapoff -a</span><br><span class="line">sed -ri `s/.*swap.*<span class="comment">#&amp;/` /etc/fstab</span></span><br></pre></td></tr></table></figure>
+<h2 id="关闭Swap"><a href="#关闭Swap" class="headerlink" title="关闭Swap"></a>关闭Swap</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ vim /etc/fstab</span><br><span class="line"><span class="comment"># UUID=9224d95f-cd87-4b56-b249-3dc7de4491d3 none            swap    sw              0       0</span></span><br></pre></td></tr></table></figure>
 
 
 
@@ -222,7 +224,37 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm config images list</span><br></pre></td></tr></table></figure>
 
 <p><strong>PS：可以先从阿里云等国内源拉取需要的镜像，然后更改Tag。</strong></p>
+<h2 id="Kubeadm-初始化"><a href="#Kubeadm-初始化" class="headerlink" title="Kubeadm 初始化"></a>Kubeadm 初始化</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm init --apiserver-advertise-address 192.168.56.105 --pod-network-cidr=10.244.0.0/16</span><br></pre></td></tr></table></figure>
 
+<p>配置 Kubectl</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">su - username</span><br><span class="line">mkdir -p <span class="variable">$HOME</span>/.kube</span><br><span class="line">sudo cp -i /etc/kubernetes/admin.conf <span class="variable">$HOME</span>/.kube/config</span><br><span class="line">sudo chown $(id -u):$(id -g) <span class="variable">$HOME</span>/.kube/config</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;source &lt;(kubectl completion bash)&quot;</span> &gt;&gt; ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="The-Connection-to-the-server-localhost-8080-was-refused-did-you-specify-the-right-host-or-port"><a href="#The-Connection-to-the-server-localhost-8080-was-refused-did-you-specify-the-right-host-or-port" class="headerlink" title="The Connection to the server localhost:8080 was refused did you specify the right host or port?"></a>The Connection to the server <a target="_blank" rel="noopener" href="http://localhost:8080">localhost:8080</a> was refused did you specify the right host or port?</h3><p>解决方案：</p>
+<p>Kubernetes master 没有与本机绑定，集群初始化的时候没有绑定，此时设置在本机的环境变量可解决</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo su</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;export KUBECONFIG=/etc/kubernetes/admin.conf&quot;</span> &gt;&gt; /etc/profile</span><br><span class="line"></span><br><span class="line">soure /etc/profile</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="安装Pod-网络"><a href="#安装Pod-网络" class="headerlink" title="安装Pod 网络"></a>安装Pod 网络</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">kubectl apply -f &lt;https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 无外网可使用以下命令</span></span><br><span class="line">kubectl apply -f [&lt;https://github.com/flannel-io/flannel/blob/master/Documentation/kube-flannel.yml&gt;](&lt;https://github.com/flannel-io/flannel/blob/master/Documentation/kube-flannel.yml&gt;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="添加子节点"><a href="#添加子节点" class="headerlink" title="添加子节点"></a>添加子节点</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#在master 节点上查询Token</span></span><br><span class="line">kubeadm token list </span><br><span class="line"></span><br><span class="line"><span class="comment">#Token 默认存在24小时，如果不存在可以自己创建一个新token</span></span><br><span class="line"><span class="comment">#kubeadm token create</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#添加节点</span></span><br><span class="line">kubeadm join --token sq10bo.yklylpvoavkbg9om Ip:6443</span><br></pre></td></tr></table></figure>
+
+<p>可能遇见问题：</p>
+<p>discovery.bootstrapToken: Invalid value: “”: using token-based discovery without caCertHashes can be unsafe. Set unsafeSkipCAVerification to continue</p>
+<p>解决方案：</p>
+<p>如果出现以下错误，说明需要进行ca校验可以使用–discovery-token-unsafe-skip-ca-verification参数忽略校验</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubeadm join --token tokenId Ip:6443 --discovery-token-unsafe-skip-ca-verification</span><br></pre></td></tr></table></figure>
+
+<p>遇见问题</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[ERROR Port-10250]: Port 10250 is <span class="keyword">in</span> use</span><br><span class="line">        [ERROR DirAvailable--etc-kubernetes-manifests]: /etc/kubernetes/manifests is not empty</span><br><span class="line">        [ERROR FileAvailable--etc-kubernetes-pki-ca.crt]: /etc/kubernetes/pki/ca.crt already exists</span><br><span class="line">        [ERROR FileAvailable--etc-kubernetes-kubelet.conf]: /etc/kubernetes/kubelet.conf already exists</span><br></pre></td></tr></table></figure>
+
+<p>解决办法：</p>
+<p>使用虚拟机时，子节点加入集群时，可能会因为本身克隆的Master节点的镜像，照成HostName 一致，所以需要更改HostName</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#修改以下两个文件，然后重启虚拟机</span></span><br><span class="line">vi /etc/hostname</span><br><span class="line">vi /etc/hosts</span><br><span class="line">kubeadm reset</span><br></pre></td></tr></table></figure>
         </div>
 
         
